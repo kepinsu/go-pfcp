@@ -15,7 +15,7 @@ func (i *IE) Metric() (uint8, error) {
 	case Metric:
 		return i.ValueAsUint8()
 	case LoadControlInformation:
-		ies, err := i.LoadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -26,7 +26,7 @@ func (i *IE) Metric() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case OverloadControlInformation:
-		ies, err := i.OverloadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

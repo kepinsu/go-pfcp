@@ -19,14 +19,9 @@ func (i *IE) Proxying() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Proxying {
-				return x.Proxying()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Proxying, nil
 	case UpdateForwardingParameters:
-		ies, err := i.UpdateForwardingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

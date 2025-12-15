@@ -19,36 +19,21 @@ func (i *IE) TransportLevelMarking() (uint16, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TransportLevelMarking {
-				return x.TransportLevelMarking()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.TransportLevelMarking, nil
 	case UpdateForwardingParameters:
 		ies, err := i.UpdateForwardingParameters()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TransportLevelMarking {
-				return x.TransportLevelMarking()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.TransportLevelMarking, nil
 	case DuplicatingParameters:
 		ies, err := i.DuplicatingParameters()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TransportLevelMarking {
-				return x.TransportLevelMarking()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.TransportLevelMarking, nil
 	case UpdateDuplicatingParameters:
-		ies, err := i.UpdateDuplicatingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -59,7 +44,7 @@ func (i *IE) TransportLevelMarking() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -70,7 +55,7 @@ func (i *IE) TransportLevelMarking() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -81,7 +66,7 @@ func (i *IE) TransportLevelMarking() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case QoSInformationInGTPUPathQoSReport:
-		ies, err := i.QoSInformationInGTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

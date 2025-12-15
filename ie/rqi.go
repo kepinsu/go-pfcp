@@ -19,14 +19,13 @@ func (i *IE) RQI() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == RQI {
-				return x.RQI()
-			}
+		// RQI between 1 and 65,535
+		if ies.ReflectiveQoS > 0 {
+			return ies.ReflectiveQoS, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

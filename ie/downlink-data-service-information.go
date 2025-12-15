@@ -29,7 +29,7 @@ func (i *IE) DownlinkDataServiceInformation() ([]byte, error) {
 	case DownlinkDataServiceInformation:
 		return i.Payload, nil
 	case DownlinkDataReport:
-		ies, err := i.DownlinkDataReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}

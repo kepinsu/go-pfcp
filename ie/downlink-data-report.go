@@ -10,10 +10,67 @@ func NewDownlinkDataReport(ies ...*IE) *IE {
 }
 
 // DownlinkDataReport returns the IEs above DownlinkDataReport if the type of IE matches.
-func (i *IE) DownlinkDataReport() ([]*IE, error) {
+func (i *IE) DownlinkDataReport() (*DownlinkDataReportFields, error) {
 	if i.Type != DownlinkDataReport {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseDownlinkDataReport(i.Payload)
+}
+
+// DownlinkDataReportFields is a set of fields in DownlinkDataReport IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type DownlinkDataReportFields struct {
+	PDRID                          uint16
+	DownlinkDataServiceInformation []byte
+	DLDataPacketsSize              uint16
+	DLDataStatus                   uint8
+}
+
+func ParseDownlinkDataReport(b []byte) (*DownlinkDataReportFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	f := &DownlinkDataReportFields{}
+	err = f.ParseIEs(ies)
+	return f, err
+}
+
+// parseUserLocationInformationFields decodes parseUserLocationInformationFields.
+func (f *DownlinkDataReportFields) ParseIEs(ies []*IE) error {
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case PDRID:
+			v, err := ie.PDRID()
+			if err != nil {
+				return err
+			}
+			f.PDRID = v
+		case DownlinkDataServiceInformation:
+			v, err := ie.DownlinkDataServiceInformation()
+			if err != nil {
+				return err
+			}
+			f.DownlinkDataServiceInformation = v
+		case DLDataPacketsSize:
+			v, err := ie.DLDataPacketsSize()
+			if err != nil {
+				return err
+			}
+			f.DLDataPacketsSize = v
+		case DataStatus:
+			v, err := ie.DataStatus()
+			if err != nil {
+				return err
+			}
+			f.DLDataStatus = v
+		}
+	}
+	return nil
 }

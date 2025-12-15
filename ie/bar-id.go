@@ -15,22 +15,14 @@ func (i *IE) BARID() (uint8, error) {
 	case BARID:
 		return i.ValueAsUint8()
 	case CreateFAR:
-		ies, err := i.CreateFAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == BARID {
 				return x.BARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateFAR:
-		ies, err := i.UpdateFAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == BARID {
 				return x.BARID()
 			}
@@ -41,30 +33,17 @@ func (i *IE) BARID() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == BARID {
-				return x.BARID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.BarID, nil
 	case UpdateBARWithinSessionReportResponse,
 		UpdateBARWithinSessionModificationRequest:
-		ies, err := i.UpdateBAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == BARID {
 				return x.BARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case RemoveBAR:
-		ies, err := i.RemoveBAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == BARID {
 				return x.BARID()
 			}

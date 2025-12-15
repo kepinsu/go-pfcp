@@ -29,17 +29,14 @@ func (i *IE) MACAddressesDetected() (*MACAddressesDetectedFields, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		return fields, nil
 	case EthernetTrafficInformation:
 		ies, err := i.EthernetTrafficInformation()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddressesDetected {
-				return x.MACAddressesDetected()
-			}
+		if ies.MACAddressesDetected != nil {
+			return ies.MACAddressesDetected, nil
 		}
 		return nil, ErrIENotFound
 	case EthernetContextInformation:
@@ -47,10 +44,8 @@ func (i *IE) MACAddressesDetected() (*MACAddressesDetectedFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddressesDetected {
-				return x.MACAddressesDetected()
-			}
+		if ies.MACAddressesDetected != nil {
+			return ies.MACAddressesDetected, nil
 		}
 		return nil, ErrIENotFound
 	case UsageReportWithinSessionModificationResponse,
@@ -60,10 +55,9 @@ func (i *IE) MACAddressesDetected() (*MACAddressesDetectedFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetTrafficInformation {
-				return x.MACAddressesDetected()
-			}
+		if ies.EthernetTrafficInformation != nil &&
+			ies.EthernetTrafficInformation.MACAddressesDetected != nil {
+			return ies.EthernetTrafficInformation.MACAddressesDetected, nil
 		}
 		return nil, ErrIENotFound
 	default:

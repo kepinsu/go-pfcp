@@ -19,10 +19,8 @@ func (i *IE) RDSConfigurationInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == RDSConfigurationInformation {
-				return x.RDSConfigurationInformation()
-			}
+		if ies.RDSConfigurationInformation > 0 {
+			return ies.RDSConfigurationInformation, nil
 		}
 		return 0, ErrIENotFound
 	default:

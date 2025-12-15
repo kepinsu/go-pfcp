@@ -19,14 +19,12 @@ func (i *IE) PDRID() (uint16, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDRID {
-				return x.PDRID()
-			}
+		if ies.ID > 0 {
+			return ies.ID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdatePDR:
-		ies, err := i.UpdatePDR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -37,7 +35,7 @@ func (i *IE) PDRID() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case RemovePDR:
-		ies, err := i.RemovePDR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -52,14 +50,12 @@ func (i *IE) PDRID() (uint16, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDRID {
-				return x.PDRID()
-			}
+		if ies.ID > 0 {
+			return ies.ID, nil
 		}
 		return 0, ErrIENotFound
 	case ApplicationDetectionInformation:
-		ies, err := i.ApplicationDetectionInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -70,7 +66,7 @@ func (i *IE) PDRID() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -81,7 +77,7 @@ func (i *IE) PDRID() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case DownlinkDataReport:
-		ies, err := i.DownlinkDataReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -92,7 +88,7 @@ func (i *IE) PDRID() (uint16, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdatedPDR:
-		ies, err := i.UpdatedPDR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

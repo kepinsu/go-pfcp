@@ -14,8 +14,10 @@ func (i *IE) NWTTPortNumber() (uint32, error) {
 	switch i.Type {
 	case NWTTPortNumber:
 		return i.ValueAsUint32()
-	case CreatedBridgeInfoForTSC:
-		ies, err := i.CreatedBridgeInfoForTSC()
+	case TSCManagementInformationWithinSessionModificationRequest,
+		TSCManagementInformationWithinSessionModificationResponse,
+		TSCManagementInformationWithinSessionReportRequest:
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

@@ -19,12 +19,7 @@ func (i *IE) MPTCPApplicableIndication() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == MPTCPApplicableIndication {
-				return x.MPTCPApplicableIndication()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.MPTCPApplicationIndiciation, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

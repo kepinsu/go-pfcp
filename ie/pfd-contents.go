@@ -36,10 +36,11 @@ func (i *IE) PFDContents() (*PFDContentsFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PFDContents {
-				return x.PFDContents()
+		for _, i := range ies.PFDContents {
+			if i == nil {
+				continue
 			}
+			return i, nil
 		}
 		return nil, ErrIENotFound
 	case ApplicationIDsPFDs:
@@ -47,9 +48,15 @@ func (i *IE) PFDContents() (*PFDContentsFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PFDContext {
-				return x.PFDContents()
+		for _, ie := range ies.PFDContexts {
+			if ie == nil {
+				continue
+			}
+			for _, i := range ie.PFDContents {
+				if i == nil {
+					continue
+				}
+				return i, nil
 			}
 		}
 		return nil, ErrIENotFound

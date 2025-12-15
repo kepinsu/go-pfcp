@@ -34,14 +34,12 @@ func (i *IE) TimeQuotaMechanism() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == TimeQuotaMechanism {
-				return x.TimeQuotaMechanism()
-			}
+		if len(ies.TimeQuotaMechanism) > 0 {
+			return ies.TimeQuotaMechanism, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}

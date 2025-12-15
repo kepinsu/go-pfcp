@@ -68,6 +68,26 @@ func TestStringIEs(t *testing.T) {
 			decoded:     "go-pfcp",
 			decoderFunc: func(i *ie.IE) (string, error) { return i.BridgeManagementInformationContainer() },
 		}, {
+			description: "CalledNumber",
+			structured:  ie.NewCalledNumber("go-pfcp"),
+			decoded:     "go-pfcp",
+			decoderFunc: func(i *ie.IE) (string, error) { return i.CalledNumber() },
+		}, {
+			description: "CalledNumber/L2TPSessionInformation",
+			structured:  ie.NewL2TPSessionInformation(ie.NewCalledNumber("go-pfcp")),
+			decoded:     "go-pfcp",
+			decoderFunc: func(i *ie.IE) (string, error) { return i.CalledNumber() },
+		}, {
+			description: "CallingNumber",
+			structured:  ie.NewCallingNumber("go-pfcp"),
+			decoded:     "go-pfcp",
+			decoderFunc: func(i *ie.IE) (string, error) { return i.CallingNumber() },
+		}, {
+			description: "CallingNumber/L2TPSessionInformation",
+			structured:  ie.NewL2TPSessionInformation(ie.NewCallingNumber("go-pfcp")),
+			decoded:     "go-pfcp",
+			decoderFunc: func(i *ie.IE) (string, error) { return i.CallingNumber() },
+		}, {
 			description: "DataNetworkAccessIdentifier",
 			structured:  ie.NewDataNetworkAccessIdentifier("go-pfcp"),
 			decoded:     "go-pfcp",

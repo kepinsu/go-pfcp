@@ -15,7 +15,7 @@ func (i *IE) DataStatus() (uint8, error) {
 	case DataStatus:
 		return i.ValueAsUint8()
 	case DownlinkDataReport:
-		ies, err := i.DownlinkDataReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

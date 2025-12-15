@@ -19,10 +19,8 @@ func (i *IE) ApplicationID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.ApplicationID()
-			}
+		if ies.PDI != nil && len(ies.PDI.ApplicationID) > 0 {
+			return ies.PDI.ApplicationID, nil
 		}
 		return "", ErrIENotFound
 	case PDI:
@@ -30,21 +28,14 @@ func (i *IE) ApplicationID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationID {
-				return x.ApplicationID()
-			}
-		}
-		return "", ErrIENotFound
+		return ies.ApplicationID, nil
 	case ApplicationIDsPFDs:
 		ies, err := i.ApplicationIDsPFDs()
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationID {
-				return x.ApplicationID()
-			}
+		if len(ies.ApplicationID) > 0 {
+			return ies.ApplicationID, nil
 		}
 		return "", ErrIENotFound
 	case ApplicationDetectionInformation:
@@ -52,10 +43,8 @@ func (i *IE) ApplicationID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationID {
-				return x.ApplicationID()
-			}
+		if len(ies.ApplicationID) > 0 {
+			return ies.ApplicationID, nil
 		}
 		return "", ErrIENotFound
 	case UsageReportWithinSessionReportRequest:
@@ -63,10 +52,8 @@ func (i *IE) ApplicationID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationDetectionInformation {
-				return x.ApplicationID()
-			}
+		if ies.ApplicationDetectionInformation != nil && len(ies.ApplicationDetectionInformation.ApplicationID) > 0 {
+			return ies.ApplicationDetectionInformation.ApplicationID, nil
 		}
 		return "", ErrIENotFound
 	default:

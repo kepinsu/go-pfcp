@@ -95,6 +95,20 @@ var (
 		UEIPAddressUsageInformation:                               true,
 		RedundantTransmissionForwardingParameters:                 true,
 		TransportDelayReporting:                                   true,
+		PartialFailureInformation:                                 true,
+		RATType:                                                   true,
+		L2TPSessionInformation:                                    true,
+		L2TPTunnelInformation:                                     true,
+		PFCPSessionChangeInfo:                                     true,
+		DirectReportingInformation:                                true,
+		MBSSessionN4mbControlInformation:                          true,
+		MBSMulticastParameters:                                    true,
+		AddMBSUnicastParameters:                                   true,
+		MBSSessionN4mbInformation:                                 true,
+		RemoveMBSUnicastParameters:                                true,
+		MBSSessionN4ControlInformation:                            true,
+		MBSSessionN4Information:                                   true,
+		DSCPToPPIControlInformation:                               true,
 	}
 	isGroupedFun = func(t IEType) bool {
 		mu.RLock()

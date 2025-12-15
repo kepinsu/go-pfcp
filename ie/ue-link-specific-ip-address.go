@@ -36,10 +36,8 @@ func (i *IE) UELinkSpecificIPAddress() (*UELinkSpecificIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MPTCPParameters {
-				return x.UELinkSpecificIPAddress()
-			}
+		if ies.MPTCPParameters != nil && ies.MPTCPParameters.UELinkSpecificIPAddress != nil {
+			return ies.MPTCPParameters.UELinkSpecificIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	case MPTCPParameters:
@@ -47,10 +45,8 @@ func (i *IE) UELinkSpecificIPAddress() (*UELinkSpecificIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UELinkSpecificIPAddress {
-				return x.UELinkSpecificIPAddress()
-			}
+		if ies.UELinkSpecificIPAddress != nil {
+			return ies.UELinkSpecificIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	default:

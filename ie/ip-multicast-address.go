@@ -36,9 +36,9 @@ func (i *IE) IPMulticastAddress() (*IPMulticastAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddressingInfo {
-				return x.IPMulticastAddress()
+		for _, ip := range ies.IPMulticastAddressingInfo {
+			if ip.IPMulticastAddress != nil {
+				return ip.IPMulticastAddress, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -47,9 +47,12 @@ func (i *IE) IPMulticastAddress() (*IPMulticastAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddressingInfo {
-				return x.IPMulticastAddress()
+		for _, ip := range ies.IPMulticastAddressingInfo {
+			if ip == nil {
+				continue
+			}
+			if ip.IPMulticastAddress != nil {
+				return ip.IPMulticastAddress, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -58,10 +61,8 @@ func (i *IE) IPMulticastAddress() (*IPMulticastAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddress {
-				return x.IPMulticastAddress()
-			}
+		if ies.IPMulticastAddress != nil {
+			return ies.IPMulticastAddress, nil
 		}
 		return nil, ErrIENotFound
 	case JoinIPMulticastInformationWithinUsageReport:
@@ -69,10 +70,8 @@ func (i *IE) IPMulticastAddress() (*IPMulticastAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddress {
-				return x.IPMulticastAddress()
-			}
+		if ies.IPMulticastAddress != nil {
+			return ies.IPMulticastAddress, nil
 		}
 		return nil, ErrIENotFound
 	case LeaveIPMulticastInformationWithinUsageReport:
@@ -80,10 +79,8 @@ func (i *IE) IPMulticastAddress() (*IPMulticastAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddress {
-				return x.IPMulticastAddress()
-			}
+		if ies.IPMulticastAddress != nil {
+			return ies.IPMulticastAddress, nil
 		}
 		return nil, ErrIENotFound
 	default:

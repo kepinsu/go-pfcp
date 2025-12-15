@@ -15,7 +15,7 @@ func (i *IE) OCIFlags() (uint8, error) {
 	case OCIFlags:
 		return i.ValueAsUint8()
 	case OverloadControlInformation:
-		ies, err := i.OverloadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

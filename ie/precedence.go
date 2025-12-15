@@ -19,14 +19,9 @@ func (i *IE) Precedence() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Precedence {
-				return x.Precedence()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Precedence, nil
 	case UpdatePDR:
-		ies, err := i.UpdatePDR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

@@ -31,10 +31,8 @@ func (i *IE) UEIPAddressPoolIdentity() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UEIPAddressPoolIdentity {
-				return x.UEIPAddressPoolIdentity()
-			}
+		if len(ies.UEIPAddressPoolIdentity) > 0 {
+			return ies.UEIPAddressPoolIdentity[0].UEIPAddressPoolIdentity()
 		}
 		return nil, ErrIENotFound
 	case UEIPAddressPoolInformation:

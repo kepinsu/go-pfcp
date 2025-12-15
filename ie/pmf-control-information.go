@@ -15,7 +15,7 @@ func (i *IE) PMFControlInformation() (uint8, error) {
 	case PMFControlInformation:
 		return i.ValueAsUint8()
 	case ProvideATSSSControlInformation:
-		ies, err := i.ProvideATSSSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

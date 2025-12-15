@@ -15,7 +15,7 @@ func (i *IE) CumulativeRateRatioThreshold() (uint32, error) {
 	case CumulativeRateRatioThreshold:
 		return i.ValueAsUint32()
 	case ClockDriftControlInformation:
-		ies, err := i.ClockDriftControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -27,7 +27,7 @@ func (i *IE) CumulativeRateRatioThreshold() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case ClockDriftReport:
-		ies, err := i.ClockDriftReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

@@ -19,10 +19,8 @@ func (i *IE) URRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == URRID {
-				return x.URRID()
-			}
+		for _, id := range ies.URRID {
+			return id, nil
 		}
 		return 0, ErrIENotFound
 	case CreateURR:
@@ -30,18 +28,9 @@ func (i *IE) URRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == URRID {
-				return x.URRID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.URRID, nil
 	case UpdateURR:
-		ies, err := i.UpdateURR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}
@@ -52,18 +41,12 @@ func (i *IE) URRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == URRID {
-				return x.URRID()
-			}
+		for _, id := range ies.URRID {
+			return id, nil
 		}
 		return 0, ErrIENotFound
 	case RemoveURR:
-		ies, err := i.RemoveURR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}
@@ -72,11 +55,7 @@ func (i *IE) URRID() (uint32, error) {
 	case UsageReportWithinSessionModificationResponse,
 		UsageReportWithinSessionDeletionResponse,
 		UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}
@@ -87,19 +66,15 @@ func (i *IE) URRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
-				return x.URRID()
-			}
+		if ies.TGPPAccessForwardingActionInformation != nil {
+			return ies.TGPPAccessForwardingActionInformation.URRID, nil
+		}
+		if ies.NonTGPPAccessForwardingActionInformation != nil {
+			return ies.NonTGPPAccessForwardingActionInformation.URRID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
-		ies, err := i.UpdateMAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			switch x.Type {
 			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
 				return x.URRID()
@@ -107,11 +82,7 @@ func (i *IE) URRID() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case QueryURR:
-		ies, err := i.QueryURR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}
@@ -122,40 +93,22 @@ func (i *IE) URRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == URRID {
-				return x.URRID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.URRID, nil
 	case NonTGPPAccessForwardingActionInformation:
 		ies, err := i.NonTGPPAccessForwardingActionInformation()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == URRID {
-				return x.URRID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.URRID, nil
 	case UpdateTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateTGPPAccessForwardingActionInformation()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateNonTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateNonTGPPAccessForwardingActionInformation()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URRID {
 				return x.URRID()
 			}

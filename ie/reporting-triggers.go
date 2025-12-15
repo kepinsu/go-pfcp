@@ -27,10 +27,8 @@ func (i *IE) ReportingTriggers() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == ReportingTriggers {
-				return x.ReportingTriggers()
-			}
+		if ies.ReportingTrigger != nil {
+			return ies.ReportingTrigger.ReportingTriggers()
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
@@ -38,10 +36,8 @@ func (i *IE) ReportingTriggers() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == ReportingTriggers {
-				return x.ReportingTriggers()
-			}
+		if ies.ReportingTrigger != nil {
+			return ies.ReportingTrigger.ReportingTriggers()
 		}
 		return nil, ErrIENotFound
 	default:

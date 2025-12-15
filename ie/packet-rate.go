@@ -43,10 +43,8 @@ func (i *IE) PacketRate() (*PacketRateFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketRate {
-				return x.PacketRate()
-			}
+		if ies.PacketRate != nil {
+			return ies.PacketRate, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateQER:
@@ -54,10 +52,8 @@ func (i *IE) PacketRate() (*PacketRateFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketRate {
-				return x.PacketRate()
-			}
+		if ies.PacketRate != nil {
+			return ies.PacketRate, nil
 		}
 		return nil, ErrIENotFound
 	default:
@@ -199,4 +195,14 @@ func (f *PacketRateFields) MarshalLen() int {
 	}
 
 	return l
+}
+
+// HasDLPR reports whether an IE has DLPR bit.
+func (f *PacketRateFields) HasDLPR() bool {
+	return has2ndBit(f.Flags)
+}
+
+// HasULPR reports whether an IE has ULPR bit.
+func (f *PacketRateFields) HasULPR() bool {
+	return has1stBit(f.Flags)
 }

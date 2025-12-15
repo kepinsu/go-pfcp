@@ -38,33 +38,22 @@ func (i *IE) FTEID() (*FTEIDFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case FTEID, RedundantTransmissionParameters:
-				return x.FTEID()
-			}
+		if ies.LocalFTEID != nil {
+			return ies.LocalFTEID, nil
+		} else if ies.RedundantTransmissionParameters != nil &&
+			ies.RedundantTransmissionParameters.LocalTeID != nil {
+			return ies.RedundantTransmissionParameters.LocalTeID, nil
 		}
 		return nil, ErrIENotFound
 	case CreatedPDR:
-		ies, err := i.CreatedPDR()
-		if err != nil {
-			return nil, err
-		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
-		}
-		return nil, ErrIENotFound
+		return nil, errors.New("cannot determine which value to return. Use LocalFTEID or LocalFTEIDN instead")
 	case ErrorIndicationReport:
 		ies, err := i.ErrorIndicationReport()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
+		if ies.RemoteFTEID != nil {
+			return ies.RemoteFTEID, nil
 		}
 		return nil, ErrIENotFound
 	case CreateTrafficEndpoint:
@@ -85,10 +74,8 @@ func (i *IE) FTEID() (*FTEIDFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
+		if ies.LocalFTEID != nil {
+			return ies.LocalFTEID, nil
 		}
 		return nil, ErrIENotFound
 	case RedundantTransmissionParameters:
@@ -96,23 +83,12 @@ func (i *IE) FTEID() (*FTEIDFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
+		if ies.LocalTeID != nil {
+			return ies.LocalTeID, nil
 		}
 		return nil, ErrIENotFound
 	case UpdatedPDR:
-		ies, err := i.UpdatedPDR()
-		if err != nil {
-			return nil, err
-		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
-		}
-		return nil, ErrIENotFound
+		return nil, errors.New("cannot determine which value to return. Use LocalFTEID or LocalFTEIDN instead")
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}

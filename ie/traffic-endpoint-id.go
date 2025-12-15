@@ -19,9 +19,9 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.TrafficEndpointID()
+		if ies.PDI != nil {
+			if len(ies.PDI.TrafficEndpointID) > 0 {
+				return ies.PDI.TrafficEndpointID[0], nil
 			}
 		}
 		return 0, ErrIENotFound
@@ -30,10 +30,8 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TrafficEndpointID {
-				return x.TrafficEndpointID()
-			}
+		if len(ies.TrafficEndpointID) > 0 {
+			return ies.TrafficEndpointID[0], nil
 		}
 		return 0, ErrIENotFound
 	case ForwardingParameters:
@@ -41,14 +39,9 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TrafficEndpointID {
-				return x.TrafficEndpointID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.LinkedTrafficEndpointID, nil
 	case UpdateForwardingParameters:
-		ies, err := i.UpdateForwardingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -70,7 +63,7 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case CreatedTrafficEndpoint:
-		ies, err := i.CreatedTrafficEndpoint()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -81,7 +74,7 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateTrafficEndpoint:
-		ies, err := i.UpdateTrafficEndpoint()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -92,7 +85,7 @@ func (i *IE) TrafficEndpointID() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case RemoveTrafficEndpoint:
-		ies, err := i.RemoveTrafficEndpoint()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

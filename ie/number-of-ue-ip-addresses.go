@@ -35,10 +35,8 @@ func (i *IE) NumberOfUEIPAddresses() (*NumberOfUEIPAddressesFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == NumberOfUEIPAddresses {
-				return x.NumberOfUEIPAddresses()
-			}
+		if ies.NumberOfUEIPAddresses != nil {
+			return ies.NumberOfUEIPAddresses, nil
 		}
 		return nil, ErrIENotFound
 	default:

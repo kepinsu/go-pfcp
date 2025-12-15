@@ -19,10 +19,8 @@ func (i *IE) TransportDelayReporting() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == TransportDelayReporting {
-				return x.TransportDelayReporting()
-			}
+		if ies.TransportDelayReporting != nil {
+			return ies.TransportDelayReporting.TransportDelayReporting()
 		}
 		return nil, ErrIENotFound
 	case UpdatePDR:
@@ -30,13 +28,50 @@ func (i *IE) TransportDelayReporting() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == TransportDelayReporting {
-				return x.TransportDelayReporting()
-			}
+		if ies.TransportDelayReporting != nil {
+			return ies.TransportDelayReporting.TransportDelayReporting()
 		}
 		return nil, ErrIENotFound
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
+}
+
+// TransportDelayReportingFields is a set of felds in TransportDelayReporting IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type TransportDelayReportingFields struct {
+	PrecedingULGTPUPeer *RemoteGTPUPeerFields
+	DSCP                uint16
+}
+
+// TransportDelayReportingFields returns the IEs above TransportDelayReporting IE
+func ParseTransportDelayReportingFields(b []byte) (*TransportDelayReportingFields, error) {
+
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	p := &TransportDelayReportingFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case RemoteGTPUPeer:
+			v, err := ie.RemoteGTPUPeer()
+			if err != nil {
+				return p, err
+			}
+			p.PrecedingULGTPUPeer = v
+		case TransportLevelMarking:
+			v, err := ie.TransportLevelMarking()
+			if err != nil {
+				return p, err
+			}
+			p.DSCP = v
+		}
+	}
+	return p, nil
 }

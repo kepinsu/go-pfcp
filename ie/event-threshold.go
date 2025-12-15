@@ -15,7 +15,7 @@ func (i *IE) EventThreshold() (uint32, error) {
 	case EventThreshold:
 		return i.ValueAsUint32()
 	case CreateURR:
-		ies, err := i.CreateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -26,7 +26,7 @@ func (i *IE) EventThreshold() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -37,7 +37,7 @@ func (i *IE) EventThreshold() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case AdditionalMonitoringTime:
-		ies, err := i.AdditionalMonitoringTime()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

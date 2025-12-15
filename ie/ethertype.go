@@ -15,18 +15,18 @@ func (i *IE) Ethertype() (uint16, error) {
 	case Ethertype:
 		return i.ValueAsUint16()
 	case PDI:
-		ies, err := i.PDI()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
 		for _, x := range ies {
-			if x.Type == Ethertype {
+			if x.Type == EthernetPacketFilter {
 				return x.Ethertype()
 			}
 		}
 		return 0, ErrIENotFound
 	case EthernetPacketFilter:
-		ies, err := i.EthernetPacketFilter()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

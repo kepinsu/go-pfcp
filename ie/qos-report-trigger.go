@@ -15,7 +15,7 @@ func (i *IE) QoSReportTrigger() (uint8, error) {
 	case QoSReportTrigger:
 		return i.ValueAsUint8()
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -26,7 +26,7 @@ func (i *IE) QoSReportTrigger() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

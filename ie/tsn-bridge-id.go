@@ -50,7 +50,7 @@ func (i *IE) TSNBridgeID() (net.HardwareAddr, error) {
 		}
 		return net.HardwareAddr(i.Payload[1:9]), nil
 	case CreatedBridgeInfoForTSC:
-		ies, err := i.CreatedBridgeInfoForTSC()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}

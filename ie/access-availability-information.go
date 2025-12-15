@@ -31,13 +31,7 @@ func (i *IE) AccessAvailabilityInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-
-		for _, x := range ies {
-			if x.Type == AccessAvailabilityInformation {
-				return x.AccessAvailabilityInformation()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.AccessAvailabilityInformation, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

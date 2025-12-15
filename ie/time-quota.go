@@ -31,14 +31,9 @@ func (i *IE) TimeQuota() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TimeQuota {
-				return x.TimeQuota()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.TimeQuota, nil
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

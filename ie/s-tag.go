@@ -36,10 +36,8 @@ func (i *IE) STAG() (*STAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetPacketFilter {
-				return x.STAG()
-			}
+		if ies.EthernetPacketFilter != nil && ies.EthernetPacketFilter.STAG != nil {
+			return ies.EthernetPacketFilter.STAG, nil
 		}
 		return nil, ErrIENotFound
 	case EthernetPacketFilter:
@@ -47,10 +45,8 @@ func (i *IE) STAG() (*STAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == STAG {
-				return x.STAG()
-			}
+		if ies.STAG != nil {
+			return ies.STAG, nil
 		}
 		return nil, ErrIENotFound
 	case MACAddressesDetected:
@@ -70,10 +66,8 @@ func (i *IE) STAG() (*STAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddressesDetected {
-				return x.STAG()
-			}
+		if ies.MACAddressesDetected != nil && len(ies.MACAddressesDetected.STAG) > 0 {
+			return ParseSTAGFields(ies.MACAddressesDetected.STAG)
 		}
 		return nil, ErrIENotFound
 	default:

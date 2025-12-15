@@ -27,14 +27,13 @@ func (i *IE) QFI() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QFI {
-				return x.QFI()
-			}
+		// QFI values range from 1 to 65,535
+		if ies.QFI > 0 {
+			return ies.QFI, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -56,7 +55,7 @@ func (i *IE) QFI() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateTrafficEndpoint:
-		ies, err := i.UpdateTrafficEndpoint()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -71,14 +70,24 @@ func (i *IE) QFI() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
+		// QFI values range from 1 to 65,535
+		if ies.QFI > 0 {
+			return ies.QFI, nil
+		}
+		return 0, ErrIENotFound
+	case QoSMonitoringReport:
+		ies, err := ParseMultiIEs(i.Payload)
+		if err != nil {
+			return 0, err
+		}
 		for _, x := range ies {
 			if x.Type == QFI {
 				return x.QFI()
 			}
 		}
 		return 0, ErrIENotFound
-	case QoSMonitoringReport:
-		ies, err := i.QoSMonitoringReport()
+	case DSCPToPPIControlInformation:
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

@@ -19,69 +19,6 @@ func TestByteArrayIEs(t *testing.T) {
 		decoderFunc func(*ie.IE) ([]byte, error)
 	}{
 		{
-			description: "ApplyAction/pre-16.3.0",
-			structured:  ie.NewApplyAction(0x04), // Flag BUFF is set
-			decoded:     []byte{0x04},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0-compat",
-			structured:  ie.NewApplyAction(0x04, 0x00), // Flag BUFF is set
-			decoded:     []byte{0x04, 0x00},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0",
-			structured:  ie.NewApplyAction(0x04, 0x02), //Flags BUFF and BDPN are set
-			decoded:     []byte{0x04, 0x02},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/pre-16.3.0/CreateFAR",
-			structured: ie.NewCreateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04), // Flag BUFF is set
-			),
-			decoded:     []byte{0x04},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0-compat/CreateFAR",
-			structured: ie.NewCreateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04, 0x00), // Flag BUFF is set
-			),
-			decoded:     []byte{0x04, 0x00},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0/CreateFAR",
-			structured: ie.NewCreateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04, 0x02), // Flags BUFF and BDPN are set
-			),
-			decoded:     []byte{0x04, 0x02},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/pre-16.3.0/UpdateFAR",
-			structured: ie.NewUpdateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04), // Flag BUFF is set
-			),
-			decoded:     []byte{0x04},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0-compat/UpdateFAR",
-			structured: ie.NewUpdateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04, 0x00), // Flag BUFF is set
-			),
-			decoded:     []byte{0x04, 0x00},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
-			description: "ApplyAction/post-16.3.0/UpdateFAR",
-			structured: ie.NewUpdateFAR(
-				ie.NewFARID(0xffffffff),
-				ie.NewApplyAction(0x04, 0x02), // Flags BUFF and BDPN are set
-			),
-			decoded:     []byte{0x04, 0x02},
-			decoderFunc: func(i *ie.IE) ([]byte, error) { return i.ApplyAction() },
-		}, {
 			description: "CPFunctionFeatures",
 			structured:  ie.NewCPFunctionFeatures(0x3f),
 			decoded:     []byte{0x3f},

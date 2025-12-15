@@ -25,7 +25,7 @@ func (i *IE) DestinationInterface() (uint8, error) {
 	case DestinationInterface:
 		return i.ValueAsUint8()
 	case ForwardingParameters:
-		ies, err := i.ForwardingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -36,7 +36,7 @@ func (i *IE) DestinationInterface() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateForwardingParameters:
-		ies, err := i.UpdateForwardingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -47,7 +47,7 @@ func (i *IE) DestinationInterface() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case DuplicatingParameters:
-		ies, err := i.DuplicatingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -58,7 +58,7 @@ func (i *IE) DestinationInterface() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateDuplicatingParameters:
-		ies, err := i.UpdateDuplicatingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

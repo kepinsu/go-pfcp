@@ -16,7 +16,7 @@ func (i *IE) QueryURRReference() (uint32, error) {
 		return i.ValueAsUint32()
 	case UsageReportWithinSessionModificationResponse,
 		UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

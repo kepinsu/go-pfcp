@@ -38,7 +38,6 @@ func (i *IE) AlternativeSMFIPAddress() (*AlternativeSMFIPAddressFields, error) {
 // AlternativeSMFIPAddressFields represents a fields contained in AlternativeSMFIPAddress IE.
 type AlternativeSMFIPAddressFields struct {
 	Flags       uint8
-	TEID        uint32
 	IPv4Address net.IP
 	IPv6Address net.IP
 	ChooseID    []byte

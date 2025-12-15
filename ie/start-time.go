@@ -22,7 +22,7 @@ func (i *IE) StartTime() (time.Time, error) {
 	case UsageReportWithinSessionModificationResponse,
 		UsageReportWithinSessionDeletionResponse,
 		UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}
@@ -33,7 +33,7 @@ func (i *IE) StartTime() (time.Time, error) {
 		}
 		return time.Time{}, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}
@@ -44,7 +44,7 @@ func (i *IE) StartTime() (time.Time, error) {
 		}
 		return time.Time{}, ErrIENotFound
 	case QoSMonitoringReport:
-		ies, err := i.QoSMonitoringReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}

@@ -26,10 +26,8 @@ func (i *IE) EndTime() (time.Time, error) {
 		if err != nil {
 			return time.Time{}, err
 		}
-		for _, x := range ies {
-			if x.Type == EndTime {
-				return x.EndTime()
-			}
+		if !ies.EndTime.IsZero() {
+			return ies.EndTime, nil
 		}
 		return time.Time{}, ErrIENotFound
 	default:

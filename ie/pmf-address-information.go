@@ -37,10 +37,8 @@ func (i *IE) PMFAddressInformation() (*PMFAddressInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PMFParameters {
-				return x.PMFAddressInformation()
-			}
+		if ies.PMFParameters != nil && ies.PMFParameters.PMFAddressInformation != nil {
+			return ies.PMFParameters.PMFAddressInformation, nil
 		}
 		return nil, ErrIENotFound
 	case PMFParameters:
@@ -48,10 +46,8 @@ func (i *IE) PMFAddressInformation() (*PMFAddressInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PMFAddressInformation {
-				return x.PMFAddressInformation()
-			}
+		if ies.PMFAddressInformation != nil {
+			return ies.PMFAddressInformation, nil
 		}
 		return nil, ErrIENotFound
 	default:

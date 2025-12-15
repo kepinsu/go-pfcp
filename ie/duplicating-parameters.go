@@ -10,22 +10,81 @@ func NewDuplicatingParameters(ies ...*IE) *IE {
 }
 
 // DuplicatingParameters returns the IEs above DuplicatingParameters if the type of IE matches.
-func (i *IE) DuplicatingParameters() ([]*IE, error) {
+func (i *IE) DuplicatingParameters() (*DuplicatingParametersFields, error) {
 	switch i.Type {
 	case DuplicatingParameters:
-		return ParseMultiIEs(i.Payload)
+		return ParseDuplicatingParametersFields(i.Payload)
 	case CreateFAR:
 		ies, err := i.CreateFAR()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == DuplicatingParameters {
-				return x.DuplicatingParameters()
+		for _, i := range ies.DuplicatingParameters {
+			if i == nil {
+				continue
 			}
+			return i, nil
 		}
 		return nil, ErrIENotFound
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
+}
+
+// DuplicatingParametersFields is a set of fields in DuplicatingParametersFields IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type DuplicatingParametersFields struct {
+	DestinationInterface       uint8
+	OuterHeaderCreation        *OuterHeaderCreationFields
+	TransportLevelMarking      uint16
+	ForwardingPolicy           []byte
+	ForwardingPolicyIdentifier string
+}
+
+func ParseDuplicatingParametersFields(b []byte) (*DuplicatingParametersFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	d := &DuplicatingParametersFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case DestinationInterface:
+			dest, err := ie.DestinationInterface()
+			if err != nil {
+				return d, err
+			}
+			d.DestinationInterface = dest
+		case OuterHeaderCreation:
+			creation, err := ie.OuterHeaderCreation()
+			if err != nil {
+				return d, err
+			}
+			d.OuterHeaderCreation = creation
+		case TransportLevelMarking:
+			transport, err := ie.TransportLevelMarking()
+			if err != nil {
+				return d, err
+			}
+			d.TransportLevelMarking = transport
+		case ForwardingPolicy:
+			policy, err := ie.ForwardingPolicy()
+			if err != nil {
+				return d, err
+			}
+			d.ForwardingPolicy = policy
+			identifier, err := ie.ForwardingPolicyIdentifier()
+			if err != nil {
+				return d, err
+			}
+			d.ForwardingPolicyIdentifier = identifier
+		}
+	}
+	return d, nil
 }

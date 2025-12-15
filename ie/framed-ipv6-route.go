@@ -15,22 +15,14 @@ func (i *IE) FramedIPv6Route() (string, error) {
 	case FramedIPv6Route:
 		return i.ValueAsString()
 	case CreateTrafficEndpoint:
-		ies, err := i.CreateTrafficEndpoint()
-		if err != nil {
-			return "", err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FramedIPv6Route {
 				return x.FramedIPv6Route()
 			}
 		}
 		return "", ErrIENotFound
 	case UpdateTrafficEndpoint:
-		ies, err := i.UpdateTrafficEndpoint()
-		if err != nil {
-			return "", err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FramedIPv6Route {
 				return x.FramedIPv6Route()
 			}

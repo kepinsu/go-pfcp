@@ -19,23 +19,13 @@ func (i *IE) DataNetworkAccessIdentifier() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == DataNetworkAccessIdentifier {
-				return x.DataNetworkAccessIdentifier()
-			}
-		}
-		return "", ErrIENotFound
+		return ies.DataNetworkAccessIdentifier, nil
 	case UpdateForwardingParameters:
 		ies, err := i.UpdateForwardingParameters()
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == DataNetworkAccessIdentifier {
-				return x.DataNetworkAccessIdentifier()
-			}
-		}
-		return "", ErrIENotFound
+		return ies.DataNetworkAccessIdentifier, nil
 	default:
 		return "", &InvalidTypeError{Type: i.Type}
 	}

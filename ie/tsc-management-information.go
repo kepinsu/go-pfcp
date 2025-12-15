@@ -25,47 +25,75 @@ func NewTSCManagementInformationWithinSessionReportRequest(ies ...*IE) *IE {
 }
 
 // TSCManagementInformation returns the IEs above TSCManagementInformation if the type of IE matches.
-func (i *IE) TSCManagementInformation() ([]*IE, error) {
+func (i *IE) TSCManagementInformation() (*TSCManagementInformationFields, error) {
 	switch i.Type {
 	case TSCManagementInformationWithinSessionModificationRequest,
 		TSCManagementInformationWithinSessionModificationResponse,
 		TSCManagementInformationWithinSessionReportRequest:
-
-		return ParseMultiIEs(i.Payload)
+		// Check if the ie.Parse have called or not
+		if len(i.ChildIEs) > 0 {
+			t := &TSCManagementInformationFields{}
+			if err := t.ParseIEs(i.ChildIEs...); err != nil {
+				return t, err
+			}
+		}
+		// If the ChildIEs not already parsed
+		return ParseTSCManagementInformationFields(i.Payload)
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 }
 
-// NewPortManagementInformationForTSC creates a new PortManagementInformationForTSC IE.
-func NewPortManagementInformationForTSC(typ IEType, info *IE) *IE {
-	return newGroupedIE(typ, 0, info)
+// TSCManagementInformationFields is a set of fields in TSCManagementInformation IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type TSCManagementInformationFields struct {
+	PortManagementInformationContainer         string
+	UserPlanNodeManagementInformationContainer string
+	NWTTPortNumber                             uint32
 }
 
-// NewPortManagementInformationForTSCWithinSessionModificationRequest creates a new PortManagementInformationForTSCWithinSessionModificationRequest IE.
-func NewPortManagementInformationForTSCWithinSessionModificationRequest(info *IE) *IE {
-	return newGroupedIE(PortManagementInformationForTSCWithinSessionModificationRequest, 0, info)
-}
-
-// NewPortManagementInformationForTSCWithinSessionModificationResponse creates a new PortManagementInformationForTSCWithinSessionModificationResponse IE.
-func NewPortManagementInformationForTSCWithinSessionModificationResponse(info *IE) *IE {
-	return newGroupedIE(PortManagementInformationForTSCWithinSessionModificationResponse, 0, info)
-}
-
-// NewPortManagementInformationForTSCWithinSessionReportRequest creates a new PortManagementInformationForTSCWithinSessionReportRequest IE.
-func NewPortManagementInformationForTSCWithinSessionReportRequest(info *IE) *IE {
-	return newGroupedIE(PortManagementInformationForTSCWithinSessionReportRequest, 0, info)
-}
-
-// PortManagementInformationForTSC returns the IEs above PortManagementInformationForTSC if the type of IE matches.
-func (i *IE) PortManagementInformationForTSC() ([]*IE, error) {
-	switch i.Type {
-	case PortManagementInformationForTSCWithinSessionModificationRequest,
-		PortManagementInformationForTSCWithinSessionModificationResponse,
-		PortManagementInformationForTSCWithinSessionReportRequest:
-
-		return ParseMultiIEs(i.Payload)
-	default:
-		return nil, &InvalidTypeError{Type: i.Type}
+// ParseTSCManagementInformationFields returns the IEs above TSCManagementInformation.
+func ParseTSCManagementInformationFields(b []byte) (*TSCManagementInformationFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
 	}
+	f := &TSCManagementInformationFields{}
+	if err := f.ParseIEs(ies...); err != nil {
+		return f, err
+	}
+	return f, nil
+}
+
+// ParseIEs will iterator over all childs IE to avoid to use Parse or ParseMultiIEs any time we iterate in IE
+func (t *TSCManagementInformationFields) ParseIEs(ies ...*IE) error {
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case PortManagementInformationContainer:
+			dest, err := ie.PortManagementInformationContainer()
+			if err != nil {
+				return err
+			}
+			t.PortManagementInformationContainer = dest
+		case BridgeManagementInformationContainer:
+			v, err := ie.BridgeManagementInformationContainer()
+			if err != nil {
+				return err
+			}
+			t.UserPlanNodeManagementInformationContainer = v
+		case NWTTPortNumber:
+			v, err := ie.NWTTPortNumber()
+			if err != nil {
+				return err
+			}
+			t.NWTTPortNumber = v
+		}
+	}
+	return nil
 }

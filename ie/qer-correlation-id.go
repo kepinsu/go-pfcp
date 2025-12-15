@@ -19,14 +19,12 @@ func (i *IE) QERCorrelationID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QERCorrelationID {
-				return x.QERCorrelationID()
-			}
+		if ies.QERCorrelationID > 0 {
+			return ies.QERCorrelationID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

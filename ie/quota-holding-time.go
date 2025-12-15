@@ -31,14 +31,12 @@ func (i *IE) QuotaHoldingTime() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QuotaHoldingTime {
-				return x.QuotaHoldingTime()
-			}
+		if ies.QuotaHoldingTime > 0 {
+			return ies.QuotaHoldingTime, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

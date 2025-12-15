@@ -28,10 +28,8 @@ func (i *IE) SourceInterface() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.SourceInterface()
-			}
+		if ies.PDI != nil {
+			return ies.PDI.SourceInterface, nil
 		}
 		return 0, ErrIENotFound
 	case UpdatePDR:
@@ -39,14 +37,12 @@ func (i *IE) SourceInterface() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.SourceInterface()
-			}
+		if ies.PDI != nil {
+			return ies.PDI.SourceInterface, nil
 		}
 		return 0, ErrIENotFound
 	case PDI:
-		ies, err := i.PDI()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

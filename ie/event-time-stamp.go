@@ -20,18 +20,14 @@ func (i *IE) EventTimeStamp() (time.Time, error) {
 	case EventTimeStamp:
 		return i.valueAs3GPPTimestamp()
 	case UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
-		if err != nil {
-			return time.Time{}, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == EventTimeStamp {
 				return x.EventTimeStamp()
 			}
 		}
 		return time.Time{}, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}
@@ -42,18 +38,14 @@ func (i *IE) EventTimeStamp() (time.Time, error) {
 		}
 		return time.Time{}, ErrIENotFound
 	case QoSMonitoringReport:
-		ies, err := i.QoSMonitoringReport()
-		if err != nil {
-			return time.Time{}, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == EventTimeStamp {
 				return x.EventTimeStamp()
 			}
 		}
 		return time.Time{}, ErrIENotFound
 	case ClockDriftReport:
-		ies, err := i.ClockDriftReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}

@@ -19,23 +19,13 @@ func (i *IE) NumberOfReports() (uint16, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == NumberOfReports {
-				return x.NumberOfReports()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.NumberOfReports, nil
 	case UpdateURR:
 		ies, err := i.UpdateURR()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == NumberOfReports {
-				return x.NumberOfReports()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.NumberOfReports, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

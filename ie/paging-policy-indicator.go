@@ -25,14 +25,9 @@ func (i *IE) PagingPolicyIndicator() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PagingPolicyIndicator {
-				return x.PagingPolicyIndicator()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.PagingPolicyIndicator, nil
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

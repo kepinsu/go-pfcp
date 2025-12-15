@@ -15,7 +15,7 @@ func (i *IE) SuggestedBufferingPacketsCount() (uint8, error) {
 	case SuggestedBufferingPacketsCount:
 		return i.ValueAsUint8()
 	case CreateBAR:
-		ies, err := i.CreateBAR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -27,7 +27,7 @@ func (i *IE) SuggestedBufferingPacketsCount() (uint8, error) {
 		return 0, ErrIENotFound
 	case UpdateBARWithinSessionReportResponse,
 		UpdateBARWithinSessionModificationRequest:
-		ies, err := i.UpdateBAR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

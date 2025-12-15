@@ -37,9 +37,11 @@ func (i *IE) SDFFilter() (*SDFFilterFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.SDFFilter()
+		if ies.PDI != nil {
+			for _, x := range ies.PDI.SDFFilter {
+				if x != nil {
+					return x, nil
+				}
 			}
 		}
 		return nil, ErrIENotFound
@@ -48,9 +50,9 @@ func (i *IE) SDFFilter() (*SDFFilterFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SDFFilter {
-				return x.SDFFilter()
+		for _, x := range ies.SDFFilter {
+			if x != nil {
+				return x, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -59,9 +61,9 @@ func (i *IE) SDFFilter() (*SDFFilterFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SDFFilter {
-				return x.SDFFilter()
+		for _, x := range ies.SDFFilter {
+			if x != nil {
+				return x, nil
 			}
 		}
 		return nil, ErrIENotFound

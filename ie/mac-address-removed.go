@@ -36,10 +36,8 @@ func (i *IE) MACAddressesRemoved() (*MACAddressesRemovedFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddressesRemoved {
-				return x.MACAddressesRemoved()
-			}
+		if ies.MACAddressesRemoved != nil {
+			return ies.MACAddressesRemoved, nil
 		}
 		return nil, ErrIENotFound
 	case UsageReportWithinSessionModificationResponse,
@@ -49,10 +47,9 @@ func (i *IE) MACAddressesRemoved() (*MACAddressesRemovedFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetTrafficInformation {
-				return x.MACAddressesRemoved()
-			}
+		if ies.EthernetTrafficInformation != nil &&
+			ies.EthernetTrafficInformation.MACAddressesRemoved != nil {
+			return ies.EthernetTrafficInformation.MACAddressesRemoved, nil
 		}
 		return nil, ErrIENotFound
 	default:

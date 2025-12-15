@@ -15,7 +15,7 @@ func (i *IE) SequenceNumber() (uint32, error) {
 	case SequenceNumber:
 		return i.ValueAsUint32()
 	case LoadControlInformation:
-		ies, err := i.LoadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -26,7 +26,7 @@ func (i *IE) SequenceNumber() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case OverloadControlInformation:
-		ies, err := i.OverloadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

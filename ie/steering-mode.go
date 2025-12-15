@@ -23,7 +23,7 @@ func (i *IE) SteeringMode() (uint8, error) {
 	case SteeringMode:
 		return i.ValueAsUint8()
 	case CreateMAR:
-		ies, err := i.CreateMAR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -34,7 +34,7 @@ func (i *IE) SteeringMode() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
-		ies, err := i.UpdateMAR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

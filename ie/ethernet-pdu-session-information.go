@@ -19,10 +19,8 @@ func (i *IE) EthernetPDUSessionInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.EthernetPDUSessionInformation()
-			}
+		if ies.PDI != nil {
+			return ies.PDI.EthernetPDUSessionInformation, nil
 		}
 		return 0, ErrIENotFound
 	case PDI:
@@ -30,12 +28,7 @@ func (i *IE) EthernetPDUSessionInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetPDUSessionInformation {
-				return x.EthernetPDUSessionInformation()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.EthernetPDUSessionInformation, nil
 	case CreateTrafficEndpoint:
 		ies, err := i.CreateTrafficEndpoint()
 		if err != nil {

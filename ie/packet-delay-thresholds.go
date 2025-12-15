@@ -36,10 +36,8 @@ func (i *IE) PacketDelayThresholds() (*PacketDelayThresholdsFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketDelayThresholds {
-				return x.PacketDelayThresholds()
-			}
+		if ies.PacketDelayThresholds != nil {
+			return ies.PacketDelayThresholds, nil
 		}
 		return nil, ErrIENotFound
 	default:

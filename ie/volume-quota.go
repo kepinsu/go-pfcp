@@ -36,10 +36,8 @@ func (i *IE) VolumeQuota() (*VolumeQuotaFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == VolumeQuota {
-				return x.VolumeQuota()
-			}
+		if ies.VolumeQuota != nil {
+			return ies.VolumeQuota, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
@@ -47,10 +45,8 @@ func (i *IE) VolumeQuota() (*VolumeQuotaFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == VolumeQuota {
-				return x.VolumeQuota()
-			}
+		if ies.VolumeQuota != nil {
+			return ies.VolumeQuota, nil
 		}
 		return nil, ErrIENotFound
 	default:

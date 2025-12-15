@@ -19,12 +19,7 @@ func (i *IE) AggregatedURRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == AggregatedURRID {
-				return x.AggregatedURRID()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.AggregatedURRID, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

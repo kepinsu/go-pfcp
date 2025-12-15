@@ -27,14 +27,12 @@ func (i *IE) ForwardingPolicy() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == ForwardingPolicy {
-				return x.ForwardingPolicy()
-			}
+		if len(ies.ForwardingPolicy) > 0 {
+			return ies.ForwardingPolicy, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateForwardingParameters:
-		ies, err := i.UpdateForwardingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}
@@ -49,14 +47,12 @@ func (i *IE) ForwardingPolicy() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == ForwardingPolicy {
-				return x.ForwardingPolicy()
-			}
+		if len(ies.ForwardingPolicy) > 0 {
+			return ies.ForwardingPolicy, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateDuplicatingParameters:
-		ies, err := i.UpdateDuplicatingParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}

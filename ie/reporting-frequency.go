@@ -19,12 +19,7 @@ func (i *IE) ReportingFrequency() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == ReportingFrequency {
-				return x.ReportingFrequency()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.ReportingFrequency, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

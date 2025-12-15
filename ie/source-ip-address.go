@@ -36,9 +36,9 @@ func (i *IE) SourceIPAddress() (*SourceIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == IPMulticastAddressingInfo {
-				return x.SourceIPAddress()
+		for _, i := range ies.IPMulticastAddressingInfo {
+			if i.SourceIPAddress != nil {
+				return i.SourceIPAddress, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -47,10 +47,8 @@ func (i *IE) SourceIPAddress() (*SourceIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SourceIPAddress {
-				return x.SourceIPAddress()
-			}
+		if ies.SourceIPAddress != nil {
+			return ies.SourceIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	case JoinIPMulticastInformationWithinUsageReport:
@@ -58,10 +56,8 @@ func (i *IE) SourceIPAddress() (*SourceIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SourceIPAddress {
-				return x.SourceIPAddress()
-			}
+		if ies.SourceIPAddress != nil {
+			return ies.SourceIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	case LeaveIPMulticastInformationWithinUsageReport:
@@ -69,10 +65,8 @@ func (i *IE) SourceIPAddress() (*SourceIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SourceIPAddress {
-				return x.SourceIPAddress()
-			}
+		if ies.SourceIPAddress != nil {
+			return ies.SourceIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	default:

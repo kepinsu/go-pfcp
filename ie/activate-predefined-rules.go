@@ -19,10 +19,8 @@ func (i *IE) ActivatePredefinedRules() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ActivatePredefinedRules {
-				return x.ActivatePredefinedRules()
-			}
+		if len(ies.ActivatePredefinedRules) > 0 {
+			return ies.ActivatePredefinedRules, nil
 		}
 		return "", ErrIENotFound
 	case UpdatePDR:
@@ -30,10 +28,8 @@ func (i *IE) ActivatePredefinedRules() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ActivatePredefinedRules {
-				return x.ActivatePredefinedRules()
-			}
+		if len(ies.ActivatePredefinedRules) > 0 {
+			return ies.ActivatePredefinedRules, nil
 		}
 		return "", ErrIENotFound
 	default:

@@ -25,7 +25,7 @@ func (i *IE) TimeOffsetThreshold() (time.Duration, error) {
 	case TimeOffsetThreshold:
 		return time.Duration(binary.BigEndian.Uint64(i.Payload[0:8])), nil
 	case ClockDriftControlInformation:
-		ies, err := i.ClockDriftControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -37,7 +37,7 @@ func (i *IE) TimeOffsetThreshold() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case ClockDriftReport:
-		ies, err := i.ClockDriftReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

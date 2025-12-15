@@ -16,63 +16,42 @@ func NewGateStatus(ul, dl uint8) *IE {
 }
 
 // GateStatus returns GateStatus in uint8 if the type of IE matches.
-func (i *IE) GateStatus() (uint8, error) {
+func (i *IE) GateStatus() (Gate, error) {
 	switch i.Type {
 	case GateStatus:
-		return i.ValueAsUint8()
+		gateStatus, err := i.ValueAsUint8()
+		return Gate(gateStatus), err
 	case CreateQER:
 		ies, err := i.CreateQER()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == GateStatus {
-				return x.GateStatus()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.GateStatus, nil
 	case UpdateQER:
 		ies, err := i.UpdateQER()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == GateStatus {
-				return x.GateStatus()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.GateStatus, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}
 }
 
-// GateStatusUL returns GateStatusUL in uint8 if the type of IE matches.
-func (i *IE) GateStatusUL() (uint8, error) {
-	v, err := i.GateStatus()
-	if err != nil {
-		return 0, err
-	}
+// Gate is alias of uint8 to determine UL and DL status
+type Gate uint8
 
-	return (v >> 2) & 0x03, nil
+// GateStatusUL returns GateStatusUL in uint8
+func (g Gate) GateStatusUL() uint8 {
+	return (uint8(g >> 2)) & 0x03
 }
 
-// GateStatusDL returns GateStatusDL in uint8 if the type of IE matches.
-func (i *IE) GateStatusDL() (uint8, error) {
-	v, err := i.GateStatus()
-	if err != nil {
-		return 0, err
-	}
-
-	return v & 0x03, nil
+// GateStatusDL returns GateStatusDL in uint8
+func (g Gate) GateStatusDL() uint8 {
+	return uint8(g) & 0x03
 }
 
-// GateStatusULDL returns GateStatusUL and GateStatusDL in uint8 if the type of IE matches.
-func (i *IE) GateStatusULDL() (uint8, uint8, error) {
-	v, err := i.GateStatus()
-	if err != nil {
-		return 0, 0, err
-	}
-
-	return (v >> 2) & 0x03, v & 0x03, nil
+// GateStatusULDL returns GateStatusUL and GateStatusDL in uint8
+func (g Gate) GateStatusULDL() (uint8, uint8, error) {
+	return g.GateStatusUL(), g.GateStatusDL(), nil
 }

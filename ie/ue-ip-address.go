@@ -35,21 +35,18 @@ func (i *IE) UEIPAddress() (*UEIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.UEIPAddress()
-			}
+		if ies.PDI != nil && len(ies.PDI.UEIPAddress) > 0 {
+			return ies.PDI.UEIPAddress[0], nil
 		}
+
 		return nil, ErrIENotFound
 	case PDI:
 		ies, err := i.PDI()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UEIPAddress {
-				return x.UEIPAddress()
-			}
+		if len(ies.UEIPAddress) > 0 {
+			return ies.UEIPAddress[0], nil
 		}
 		return nil, ErrIENotFound
 	case CreatedPDR:
@@ -57,9 +54,9 @@ func (i *IE) UEIPAddress() (*UEIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UEIPAddress {
-				return x.UEIPAddress()
+		for _, ie := range ies.UEIPAddress {
+			if ie != nil {
+				return ie, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -68,10 +65,8 @@ func (i *IE) UEIPAddress() (*UEIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UEIPAddress {
-				return x.UEIPAddress()
-			}
+		if ies.UEIPAddress != nil {
+			return ies.UEIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	case CreateTrafficEndpoint:
@@ -86,7 +81,7 @@ func (i *IE) UEIPAddress() (*UEIPAddressFields, error) {
 		}
 		return nil, ErrIENotFound
 	case CreatedTrafficEndpoint:
-		ies, err := i.CreatedTrafficEndpoint()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}
@@ -101,9 +96,9 @@ func (i *IE) UEIPAddress() (*UEIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UEIPAddress {
-				return x.UEIPAddress()
+		for _, ie := range ies.UEIPAddress {
+			if ie != nil {
+				return ie, nil
 			}
 		}
 		return nil, ErrIENotFound

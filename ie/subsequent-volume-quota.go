@@ -36,14 +36,12 @@ func (i *IE) SubsequentVolumeQuota() (*SubsequentVolumeQuotaFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SubsequentVolumeQuota {
-				return x.SubsequentVolumeQuota()
-			}
+		if ies.SubsequentVolumeQuota != nil {
+			return ies.SubsequentVolumeQuota, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}
@@ -58,10 +56,8 @@ func (i *IE) SubsequentVolumeQuota() (*SubsequentVolumeQuotaFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == SubsequentVolumeQuota {
-				return x.SubsequentVolumeQuota()
-			}
+		if ies.SubsequentVolumeQuota != nil {
+			return ies.SubsequentVolumeQuota, nil
 		}
 		return nil, ErrIENotFound
 	default:

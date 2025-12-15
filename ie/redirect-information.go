@@ -35,10 +35,8 @@ func (i *IE) RedirectInformation() (*RedirectInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedirectInformation {
-				return x.RedirectInformation()
-			}
+		if ies.RedirectInformation != nil {
+			return ies.RedirectInformation, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateForwardingParameters:
@@ -46,10 +44,8 @@ func (i *IE) RedirectInformation() (*RedirectInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedirectInformation {
-				return x.RedirectInformation()
-			}
+		if ies.RedirectInformation != nil {
+			return ies.RedirectInformation, nil
 		}
 		return nil, ErrIENotFound
 	default:

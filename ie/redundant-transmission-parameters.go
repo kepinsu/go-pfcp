@@ -20,19 +20,26 @@ func NewRedundantTransmissionParametersInFAR(ohc, ni *IE) *IE {
 }
 
 // RedundantTransmissionParameters returns the IEs above RedundantTransmissionParameters if the type of IE matches.
-func (i *IE) RedundantTransmissionParameters() ([]*IE, error) {
+func (i *IE) RedundantTransmissionParameters() (*RedundantTransmissionParametersField, error) {
 	switch i.Type {
 	case RedundantTransmissionParameters:
-		return ParseMultiIEs(i.Payload)
+		// Check if the ie.Parse have called or not
+		if len(i.ChildIEs) > 0 {
+			r := &RedundantTransmissionParametersField{}
+			if err := r.ParseIEs(i.ChildIEs...); err != nil {
+				return r, err
+			}
+			return r, nil
+		}
+		// If the ChildIEs not already parsed
+		return ParseRedundantTransmissionParametersField(i.Payload)
 	case CreatePDR:
 		ies, err := i.CreatePDR()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PDI {
-				return x.RedundantTransmissionParameters()
-			}
+		if ies.PDI != nil && ies.PDI.RedundantTransmissionParameters != nil {
+			return ies.PDI.RedundantTransmissionParameters, nil
 		}
 		return nil, ErrIENotFound
 	case PDI:
@@ -40,10 +47,8 @@ func (i *IE) RedundantTransmissionParameters() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedundantTransmissionParameters {
-				return x.RedundantTransmissionParameters()
-			}
+		if ies.RedundantTransmissionParameters != nil {
+			return ies.RedundantTransmissionParameters, nil
 		}
 		return nil, ErrIENotFound
 	case CreateFAR:
@@ -51,10 +56,8 @@ func (i *IE) RedundantTransmissionParameters() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedundantTransmissionParameters {
-				return x.RedundantTransmissionParameters()
-			}
+		if ies.RedundantTransmissionParameters != nil {
+			return ies.RedundantTransmissionParameters, err
 		}
 		return nil, ErrIENotFound
 	case UpdateFAR:
@@ -62,10 +65,8 @@ func (i *IE) RedundantTransmissionParameters() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedundantTransmissionParameters {
-				return x.RedundantTransmissionParameters()
-			}
+		if ies.RedundantTransmissionParameters != nil {
+			return ies.RedundantTransmissionParameters, err
 		}
 		return nil, ErrIENotFound
 	case CreateTrafficEndpoint:
@@ -84,13 +85,70 @@ func (i *IE) RedundantTransmissionParameters() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RedundantTransmissionParameters {
-				return x.RedundantTransmissionParameters()
-			}
+		if ies.RedundantTransmissionDetectionParameters != nil {
+			return ies.RedundantTransmissionDetectionParameters, nil
 		}
 		return nil, ErrIENotFound
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
+}
+
+// ParseRedundantTransmissionParametersField returns the IEs above RedundantTransmissionParameters
+func ParseRedundantTransmissionParametersField(b []byte) (*RedundantTransmissionParametersField, error) {
+	// Parse all IES heres
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	r := &RedundantTransmissionParametersField{}
+	if err := r.ParseIEs(ies...); err != nil {
+		return r, nil
+	}
+	return r, nil
+}
+
+// RedundantTransmissionParametersField is a set of fields in RedundantTransmissionParametersField IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type RedundantTransmissionParametersField struct {
+	// Fields only present in PDI IE
+	LocalTeID *FTEIDFields
+
+	// Fields only present in FAR IE
+	OuterHeaderCreation *OuterHeaderCreationFields
+
+	// Fields present in FAR IE and PDI IE
+	NetworkInstance string
+}
+
+// ParseIEs will iterator over all childs IE to avoid to use Parse or ParseMultiIEs any time we iterate in IE
+func (r *RedundantTransmissionParametersField) ParseIEs(ies ...*IE) error {
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case FTEID:
+			fteid, err := ie.FTEID()
+			if err != nil {
+				return err
+			}
+			r.LocalTeID = fteid
+		case OuterHeaderCreation:
+			header, err := ie.OuterHeaderCreation()
+			if err != nil {
+				return err
+			}
+			r.OuterHeaderCreation = header
+		case NetworkInstance:
+			network, err := ie.NetworkInstance()
+			if err != nil {
+				return err
+			}
+			r.NetworkInstance = network
+		}
+	}
+	return nil
 }

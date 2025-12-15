@@ -21,10 +21,8 @@ func (i *IE) PortManagementInformationContainer() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == PortManagementInformationContainer {
-				return x.PortManagementInformationContainer()
-			}
+		if len(ies.PortManagementInformationContainer) > 0 {
+			return ies.PortManagementInformationContainer, nil
 		}
 		return "", ErrIENotFound
 	default:

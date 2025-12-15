@@ -21,12 +21,7 @@ func (i *IE) UsageInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == UsageInformation {
-				return x.UsageInformation()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.UsageInformation, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

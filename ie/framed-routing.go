@@ -25,22 +25,14 @@ func (i *IE) FramedRouting() (uint32, error) {
 	case FramedRouting:
 		return i.ValueAsUint32()
 	case CreateTrafficEndpoint:
-		ies, err := i.CreateTrafficEndpoint()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FramedRouting {
 				return x.FramedRouting()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateTrafficEndpoint:
-		ies, err := i.UpdateTrafficEndpoint()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FramedRouting {
 				return x.FramedRouting()
 			}

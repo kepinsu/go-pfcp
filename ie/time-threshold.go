@@ -30,14 +30,9 @@ func (i *IE) TimeThreshold() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == TimeThreshold {
-				return x.TimeThreshold()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.TimeThreshold, nil
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

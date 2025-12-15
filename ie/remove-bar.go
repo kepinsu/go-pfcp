@@ -10,10 +10,42 @@ func NewRemoveBAR(barID *IE) *IE {
 }
 
 // RemoveBAR returns the IEs above RemoveBAR if the type of IE matches.
-func (i *IE) RemoveBAR() ([]*IE, error) {
+func (i *IE) RemoveBAR() (*RemoveBARFields, error) {
 	if i.Type != RemoveBAR {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseRemoveBARFields(i.Payload)
+}
+
+// RemoveBARFields is a set of fields in Remove BAR IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type RemoveBARFields struct {
+	BARID uint8
+}
+
+// ParseRemoveBARFields returns the IEs above RemoveMBSUnicastParameters.
+func ParseRemoveBARFields(b []byte) (*RemoveBARFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	f := &RemoveBARFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case BARID:
+			v, err := ie.BARID()
+			if err != nil {
+				return f, err
+			}
+			f.BARID = v
+		}
+	}
+	return f, nil
 }
