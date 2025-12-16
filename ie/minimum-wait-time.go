@@ -31,12 +31,7 @@ func (i *IE) MinimumWaitTime() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == MinimumWaitTime {
-				return x.MinimumWaitTime()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.MinimumWaitTime, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

@@ -36,10 +36,8 @@ func (i *IE) VolumeThreshold() (*VolumeThresholdFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == VolumeThreshold {
-				return x.VolumeThreshold()
-			}
+		if ies.VolumeThreshold != nil {
+			return ies.VolumeThreshold, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
@@ -47,10 +45,8 @@ func (i *IE) VolumeThreshold() (*VolumeThresholdFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == VolumeThreshold {
-				return x.VolumeThreshold()
-			}
+		if ies.VolumeThreshold != nil {
+			return ies.VolumeThreshold, nil
 		}
 		return nil, ErrIENotFound
 	default:

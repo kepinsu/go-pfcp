@@ -19,14 +19,9 @@ func (i *IE) QERControlIndications() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QERControlIndications {
-				return x.QERControlIndications()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.QERControlIndications, nil
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

@@ -28,10 +28,8 @@ func (i *IE) Multiplier() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == Multiplier {
-				return x.Multiplier()
-			}
+		if ies.Multiplier != nil {
+			return ies.Multiplier.Multiplier()
 		}
 		return nil, ErrIENotFound
 	default:
@@ -49,10 +47,8 @@ func (i *IE) ValueDigits() (uint64, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Multiplier {
-				return x.ValueDigits()
-			}
+		if ies.Multiplier != nil {
+			return ies.Multiplier.ValueDigits()
 		}
 		return 0, ErrIENotFound
 	default:
@@ -74,10 +70,8 @@ func (i *IE) Exponent() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Multiplier {
-				return x.Exponent()
-			}
+		if ies.Multiplier != nil {
+			return ies.Multiplier.Exponent()
 		}
 		return 0, ErrIENotFound
 	default:

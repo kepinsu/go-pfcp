@@ -36,10 +36,8 @@ func (i *IE) CPPFCPEntityIPAddress() (*CPPFCPEntityIPAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == CPPFCPEntityIPAddress {
-				return x.CPPFCPEntityIPAddress()
-			}
+		if ies.CPPFCPEntityIPAddress != nil {
+			return ies.CPPFCPEntityIPAddress, nil
 		}
 		return nil, ErrIENotFound
 	default:

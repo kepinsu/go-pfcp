@@ -10,10 +10,42 @@ func NewRemoveSRR(srr *IE) *IE {
 }
 
 // RemoveSRR returns the IEs above RemoveSRR if the type of IE matches.
-func (i *IE) RemoveSRR() ([]*IE, error) {
+func (i *IE) RemoveSRR() (*RemoveSRRFields, error) {
 	if i.Type != RemoveSRR {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseRemoveSRRFields(i.Payload)
+}
+
+// RemoveSRRFields is a set of fields in Remove QER IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type RemoveSRRFields struct {
+	SRRID uint8
+}
+
+// ParseRemoveSRRFields returns the IEs above RemoveMBSUnicastParameters.
+func ParseRemoveSRRFields(b []byte) (*RemoveSRRFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	f := &RemoveSRRFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case SRRID:
+			v, err := ie.SRRID()
+			if err != nil {
+				return f, err
+			}
+			f.SRRID = v
+		}
+	}
+	return f, nil
 }

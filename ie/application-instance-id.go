@@ -19,10 +19,8 @@ func (i *IE) ApplicationInstanceID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationInstanceID {
-				return x.ApplicationInstanceID()
-			}
+		if len(ies.ApplicationInstanceID) > 0 {
+			return ies.ApplicationInstanceID, nil
 		}
 		return "", ErrIENotFound
 	case UsageReportWithinSessionReportRequest:
@@ -30,10 +28,8 @@ func (i *IE) ApplicationInstanceID() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationDetectionInformation {
-				return x.ApplicationInstanceID()
-			}
+		if ies.ApplicationDetectionInformation != nil && len(ies.ApplicationDetectionInformation.ApplicationInstanceID) > 0 {
+			return ies.ApplicationDetectionInformation.ApplicationInstanceID, nil
 		}
 		return "", ErrIENotFound
 	default:

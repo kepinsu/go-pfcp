@@ -15,7 +15,7 @@ func (i *IE) ATSSSLLControlInformation() (uint8, error) {
 	case ATSSSLLControlInformation:
 		return i.ValueAsUint8()
 	case ProvideATSSSControlInformation:
-		ies, err := i.ProvideATSSSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

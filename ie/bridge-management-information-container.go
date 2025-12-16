@@ -21,10 +21,8 @@ func (i *IE) BridgeManagementInformationContainer() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == BridgeManagementInformationContainer {
-				return x.BridgeManagementInformationContainer()
-			}
+		if len(ies.PortManagementInformationContainer) > 0 {
+			return ies.PortManagementInformationContainer, nil
 		}
 		return "", ErrIENotFound
 	default:

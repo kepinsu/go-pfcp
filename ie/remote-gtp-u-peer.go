@@ -36,10 +36,17 @@ func (i *IE) RemoteGTPUPeer() (*RemoteGTPUPeerFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RemoteGTPUPeer {
-				return x.RemoteGTPUPeer()
-			}
+		if len(ies.RemoteGTPUPeer) > 0 {
+			return ies.RemoteGTPUPeer[0], nil
+		}
+		return nil, ErrIENotFound
+	case PeerUPRestartReport:
+		ies, err := i.PeerUPRestartReport()
+		if err != nil {
+			return nil, err
+		}
+		if ies.RemoteGTPUPeer != nil {
+			return ies.RemoteGTPUPeer, nil
 		}
 		return nil, ErrIENotFound
 	case UserPlanePathRecoveryReport:
@@ -47,14 +54,12 @@ func (i *IE) RemoteGTPUPeer() (*RemoteGTPUPeerFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == RemoteGTPUPeer {
-				return x.RemoteGTPUPeer()
-			}
+		if ies.RemoteGTPUPeer != nil {
+			return ies.RemoteGTPUPeer, nil
 		}
 		return nil, ErrIENotFound
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +70,7 @@ func (i *IE) RemoteGTPUPeer() (*RemoteGTPUPeerFields, error) {
 		}
 		return nil, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return nil, err
 		}
@@ -267,4 +272,14 @@ func (f *RemoteGTPUPeerFields) MarshalLen() int {
 	}
 
 	return l
+}
+
+// HasNI reports whether an IE has NI bit.
+func (f *RemoteGTPUPeerFields) HasNI() bool {
+	return has4thBit(f.Flags)
+}
+
+// HasDI reports whether an IE has DI bit.
+func (f *RemoteGTPUPeerFields) HasDI() bool {
+	return has3rdBit(f.Flags)
 }

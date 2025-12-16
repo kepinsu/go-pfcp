@@ -24,14 +24,9 @@ func (i *IE) MonitoringTime() (time.Time, error) {
 		if err != nil {
 			return time.Time{}, err
 		}
-		for _, x := range ies {
-			if x.Type == MonitoringTime {
-				return x.MonitoringTime()
-			}
-		}
-		return time.Time{}, ErrIENotFound
+		return ies.MonitoringTime, nil
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return time.Time{}, err
 		}
@@ -46,12 +41,7 @@ func (i *IE) MonitoringTime() (time.Time, error) {
 		if err != nil {
 			return time.Time{}, err
 		}
-		for _, x := range ies {
-			if x.Type == MonitoringTime {
-				return x.MonitoringTime()
-			}
-		}
-		return time.Time{}, ErrIENotFound
+		return ies.MonitoringTime, nil
 	default:
 		return time.Time{}, &InvalidTypeError{Type: i.Type}
 	}

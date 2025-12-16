@@ -19,12 +19,7 @@ func (i *IE) PacketReplicationAndDetectionCarryOnInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketReplicationAndDetectionCarryOnInformation {
-				return x.PacketReplicationAndDetectionCarryOnInformation()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.PacketReplicationAndDetectionCarryOnInformation, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

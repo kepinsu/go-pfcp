@@ -15,18 +15,18 @@ func (i *IE) EthernetFilterProperties() (uint8, error) {
 	case EthernetFilterProperties:
 		return i.ValueAsUint8()
 	case PDI:
-		ies, err := i.PDI()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
 		for _, x := range ies {
-			if x.Type == EthernetFilterProperties {
+			if x.Type == EthernetPacketFilter {
 				return x.EthernetFilterProperties()
 			}
 		}
 		return 0, ErrIENotFound
 	case EthernetPacketFilter:
-		ies, err := i.EthernetPacketFilter()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

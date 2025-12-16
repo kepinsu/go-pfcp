@@ -28,15 +28,15 @@ func (i *IE) Priority() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
-				return x.Priority()
-			}
+		if ies.TGPPAccessForwardingActionInformation != nil {
+			return ies.TGPPAccessForwardingActionInformation.Priority, nil
+		}
+		if ies.NonTGPPAccessForwardingActionInformation != nil {
+			return ies.NonTGPPAccessForwardingActionInformation.Priority, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
-		ies, err := i.UpdateMAR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -52,25 +52,16 @@ func (i *IE) Priority() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Priority {
-				return x.Priority()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Priority, nil
 	case NonTGPPAccessForwardingActionInformation:
 		ies, err := i.NonTGPPAccessForwardingActionInformation()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Priority {
-				return x.Priority()
-			}
-		}
-		return 0, ErrIENotFound
+
+		return ies.Priority, nil
 	case UpdateTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateTGPPAccessForwardingActionInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -81,7 +72,7 @@ func (i *IE) Priority() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateNonTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateNonTGPPAccessForwardingActionInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

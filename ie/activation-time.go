@@ -24,10 +24,8 @@ func (i *IE) ActivationTime() (time.Time, error) {
 		if err != nil {
 			return time.Time{}, err
 		}
-		for _, x := range ies {
-			if x.Type == ActivationTime {
-				return x.ActivationTime()
-			}
+		if !ies.ActivationTime.IsZero() {
+			return ies.ActivationTime, nil
 		}
 		return time.Time{}, ErrIENotFound
 	case UpdatePDR:
@@ -35,10 +33,8 @@ func (i *IE) ActivationTime() (time.Time, error) {
 		if err != nil {
 			return time.Time{}, err
 		}
-		for _, x := range ies {
-			if x.Type == ActivationTime {
-				return x.ActivationTime()
-			}
+		if !ies.ActivationTime.IsZero() {
+			return ies.ActivationTime, nil
 		}
 		return time.Time{}, ErrIENotFound
 	default:

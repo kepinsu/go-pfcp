@@ -82,10 +82,8 @@ func (i *IE) DLBufferingDuration() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == DLBufferingDuration {
-				return x.DLBufferingDuration()
-			}
+		if ies.DLBufferingDuration > 0 {
+			return ies.DLBufferingDuration, nil
 		}
 		return 0, ErrIENotFound
 	default:

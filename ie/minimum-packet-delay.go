@@ -27,7 +27,7 @@ func (i *IE) MinimumPacketDelay() (time.Duration, error) {
 	case MinimumPacketDelay:
 		return time.Duration(binary.BigEndian.Uint32(i.Payload[0:4])) * time.Millisecond, nil
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -38,7 +38,7 @@ func (i *IE) MinimumPacketDelay() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSReport:
-		ies, err := i.GTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -49,7 +49,7 @@ func (i *IE) MinimumPacketDelay() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case QoSInformationInGTPUPathQoSReport:
-		ies, err := i.QoSInformationInGTPUPathQoSReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

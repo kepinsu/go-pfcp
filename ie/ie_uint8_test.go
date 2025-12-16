@@ -222,7 +222,9 @@ func TestUint8IEs(t *testing.T) {
 			description: "EthernetFilterProperties/PDI",
 			structured: ie.NewPDI(
 				ie.NewSourceInterface(ie.SrcInterfaceAccess),
-				ie.NewEthernetFilterProperties(0x01),
+				ie.NewEthernetPacketFilter(
+					ie.NewEthernetFilterProperties(0x01),
+				),
 			),
 			decoded:     0x01,
 			decoderFunc: func(i *ie.IE) (uint8, error) { return i.EthernetFilterProperties() },
@@ -283,82 +285,6 @@ func TestUint8IEs(t *testing.T) {
 			structured:  ie.NewFQCSID("2001::1", 1),
 			decoded:     ie.NodeIDIPv6Address,
 			decoderFunc: func(i *ie.IE) (uint8, error) { return i.NodeIDType() },
-		}, {
-			description: "GateStatus/OpenOpen",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusOpen),
-			decoded:     0,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
-		}, {
-			description: "GateStatus/OpenClosed",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusClosed),
-			decoded:     1,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
-		}, {
-			description: "GateStatus/ClosedOpen",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusOpen),
-			decoded:     4,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
-		}, {
-			description: "GateStatus/ClosedClosed",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusClosed),
-			decoded:     5,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
-		}, {
-			description: "GateStatus/OpenOpen/GateStatusUL",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusOpen),
-			decoded:     ie.GateStatusOpen,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusUL() },
-		}, {
-			description: "GateStatus/OpenOpen/GateStatusDL",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusOpen),
-			decoded:     ie.GateStatusOpen,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusDL() },
-		}, {
-			description: "GateStatus/OpenClosed/GateStatusUL",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusClosed),
-			decoded:     ie.GateStatusOpen,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusUL() },
-		}, {
-			description: "GateStatus/OpenClosed/GateStatusDL",
-			structured:  ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusClosed),
-			decoded:     ie.GateStatusClosed,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusDL() },
-		}, {
-			description: "GateStatus/ClosedOpen/GateStatusUL",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusOpen),
-			decoded:     ie.GateStatusClosed,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusUL() },
-		}, {
-			description: "GateStatus/ClosedOpen/GateStatusDL",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusOpen),
-			decoded:     ie.GateStatusOpen,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusDL() },
-		}, {
-			description: "GateStatus/ClosedClosed/GateStatusUL",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusClosed),
-			decoded:     ie.GateStatusClosed,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusUL() },
-		}, {
-			description: "GateStatus/ClosedClosed/GateStatusDL",
-			structured:  ie.NewGateStatus(ie.GateStatusClosed, ie.GateStatusClosed),
-			decoded:     ie.GateStatusClosed,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatusDL() },
-		}, {
-			description: "GateStatus/OpenOpen/CreateQER",
-			structured: ie.NewCreateQER(
-				ie.NewQERID(0xffffffff),
-				ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusOpen),
-			),
-			decoded:     0,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
-		}, {
-			description: "GateStatus/OpenOpen/UpdateQER",
-			structured: ie.NewUpdateQER(
-				ie.NewQERID(0xffffffff),
-				ie.NewGateStatus(ie.GateStatusOpen, ie.GateStatusOpen),
-			),
-			decoded:     0,
-			decoderFunc: func(i *ie.IE) (uint8, error) { return i.GateStatus() },
 		}, {
 			description: "GTPUPathInterfaceType",
 			structured:  ie.NewGTPUPathInterfaceType(1, 1),

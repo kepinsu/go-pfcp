@@ -30,14 +30,12 @@ func (i *IE) QuotaValidityTime() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QuotaValidityTime {
-				return x.QuotaValidityTime()
-			}
+		if ies.QuotaValidityTime > 0 {
+			return ies.QuotaValidityTime, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

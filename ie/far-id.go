@@ -15,44 +15,29 @@ func (i *IE) FARID() (uint32, error) {
 	case FARID:
 		return i.ValueAsUint32()
 	case CreatePDR:
-		ies, err := i.CreatePDR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdatePDR:
-		ies, err := i.UpdatePDR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case CreateFAR:
-		ies, err := i.CreateFAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateFAR:
-		ies, err := i.UpdateFAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
@@ -63,29 +48,19 @@ func (i *IE) FARID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == FARID {
-				return x.FARID()
-			}
+		if ies != nil {
+			return uint32(ies.FarIdForQuotaAction), nil
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case RemoveFAR:
-		ies, err := i.RemoveFAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
@@ -96,19 +71,14 @@ func (i *IE) FARID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
-				return x.FARID()
-			}
+		if ies.TGPPAccessForwardingActionInformation != nil {
+			return ies.TGPPAccessForwardingActionInformation.FARID, nil
+		} else if ies.NonTGPPAccessForwardingActionInformation != nil {
+			return uint32(ies.NonTGPPAccessForwardingActionInformation.FARID), nil
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
-		ies, err := i.UpdateMAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			switch x.Type {
 			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
 				return x.FARID()
@@ -120,10 +90,8 @@ func (i *IE) FARID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == FARID {
-				return x.FARID()
-			}
+		if ies != nil {
+			return uint32(ies.FARID), nil
 		}
 		return 0, ErrIENotFound
 	case NonTGPPAccessForwardingActionInformation:
@@ -131,29 +99,19 @@ func (i *IE) FARID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == FARID {
-				return x.FARID()
-			}
+		if ies != nil {
+			return uint32(ies.FARID), nil
 		}
 		return 0, ErrIENotFound
 	case UpdateTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateTGPPAccessForwardingActionInformation()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateNonTGPPAccessForwardingActionInformation:
-		ies, err := i.UpdateNonTGPPAccessForwardingActionInformation()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == FARID {
 				return x.FARID()
 			}

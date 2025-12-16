@@ -36,10 +36,8 @@ func (i *IE) QoSMonitoringMeasurement() (*QoSMonitoringMeasurementFields, error)
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == QoSMonitoringMeasurement {
-				return x.QoSMonitoringMeasurement()
-			}
+		if ies.QoSMonitoringMeasurement != nil {
+			return ies.QoSMonitoringMeasurement, nil
 		}
 		return nil, ErrIENotFound
 	default:

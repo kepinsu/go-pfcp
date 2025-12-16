@@ -27,7 +27,7 @@ func (i *IE) ValidityTimer() (time.Duration, error) {
 	case ValidityTimer:
 		return time.Duration(binary.BigEndian.Uint16(i.Payload[0:2])) * time.Second, nil
 	case UEIPAddressUsageInformation:
-		ies, err := i.UEIPAddressUsageInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

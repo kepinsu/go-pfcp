@@ -15,7 +15,7 @@ func (i *IE) DSTTPortNumber() (uint32, error) {
 	case DSTTPortNumber:
 		return i.ValueAsUint32()
 	case CreatedBridgeInfoForTSC:
-		ies, err := i.CreatedBridgeInfoForTSC()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

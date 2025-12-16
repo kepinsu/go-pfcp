@@ -10,10 +10,42 @@ func NewRemoveTrafficEndpoint(id *IE) *IE {
 }
 
 // RemoveTrafficEndpoint returns the IEs above RemoveTrafficEndpoint if the type of IE matches.
-func (i *IE) RemoveTrafficEndpoint() ([]*IE, error) {
+func (i *IE) RemoveTrafficEndpoint() (*RemoveTrafficEndpointFields, error) {
 	if i.Type != RemoveTrafficEndpoint {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseRemoveTrafficEndpointFields(i.Payload)
+}
+
+// RemoveTrafficEndpointFields is a set of fields in RemoveTrafficEndpoint IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type RemoveTrafficEndpointFields struct {
+	TrafficEndpointID uint8
+}
+
+// ParseRemoveTrafficEndpointFields returns the IEs above RemoveTrafficEndpoint.
+func ParseRemoveTrafficEndpointFields(b []byte) (*RemoveTrafficEndpointFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	f := &RemoveTrafficEndpointFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case TrafficEndpointID:
+			v, err := ie.TrafficEndpointID()
+			if err != nil {
+				return f, err
+			}
+			f.TrafficEndpointID = v
+		}
+	}
+	return f, nil
 }

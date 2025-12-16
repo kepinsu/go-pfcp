@@ -36,9 +36,9 @@ func (i *IE) MACAddress() (*MACAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetPacketFilter {
-				return x.MACAddress()
+		if ies.EthernetPacketFilter != nil {
+			if ies.EthernetPacketFilter.MacAddress != nil {
+				return ies.EthernetPacketFilter.MacAddress, nil
 			}
 		}
 		return nil, ErrIENotFound
@@ -47,10 +47,8 @@ func (i *IE) MACAddress() (*MACAddressFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddress {
-				return x.MACAddress()
-			}
+		if ies.MacAddress != nil {
+			return ies.MacAddress, nil
 		}
 		return nil, ErrIENotFound
 	default:

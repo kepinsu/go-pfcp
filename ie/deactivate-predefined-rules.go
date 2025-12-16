@@ -19,10 +19,8 @@ func (i *IE) DeactivatePredefinedRules() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == DeactivatePredefinedRules {
-				return x.DeactivatePredefinedRules()
-			}
+		if len(ies.DeactivatePredefinedRules) > 0 {
+			return ies.DeactivatePredefinedRules, nil
 		}
 		return "", ErrIENotFound
 	default:

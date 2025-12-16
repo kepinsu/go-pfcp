@@ -33,10 +33,8 @@ func (i *IE) DurationMeasurement() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == DurationMeasurement {
-				return x.DurationMeasurement()
-			}
+		if ies.DurationMeasurement > 0 {
+			return ies.DurationMeasurement, nil
 		}
 		return 0, ErrIENotFound
 	default:

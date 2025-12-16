@@ -19,10 +19,8 @@ func (i *IE) LinkedURRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == LinkedURRID {
-				return x.LinkedURRID()
-			}
+		if len(ies.LinkedURRIDs) > 0 {
+			return ies.LinkedURRIDs[0], nil
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
@@ -30,10 +28,8 @@ func (i *IE) LinkedURRID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == LinkedURRID {
-				return x.LinkedURRID()
-			}
+		if len(ies.LinkedURRIDs) > 0 {
+			return ies.LinkedURRIDs[0], nil
 		}
 		return 0, ErrIENotFound
 	default:

@@ -19,10 +19,8 @@ func (i *IE) QERID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QERID {
-				return x.QERID()
-			}
+		for _, id := range ies.QERID {
+			return id, nil
 		}
 		return 0, ErrIENotFound
 	case UpdatePDR:
@@ -30,10 +28,8 @@ func (i *IE) QERID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QERID {
-				return x.QERID()
-			}
+		for _, x := range ies.QERID {
+			return x, nil
 		}
 		return 0, ErrIENotFound
 	case CreateQER:
@@ -41,14 +37,12 @@ func (i *IE) QERID() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == QERID {
-				return x.QERID()
-			}
+		if ies.QERID > 0 {
+			return ies.QERID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateQER:
-		ies, err := i.UpdateQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -59,7 +53,7 @@ func (i *IE) QERID() (uint32, error) {
 		}
 		return 0, ErrIENotFound
 	case RemoveQER:
-		ies, err := i.RemoveQER()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

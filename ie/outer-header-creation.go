@@ -35,10 +35,8 @@ func (i *IE) OuterHeaderCreation() (*OuterHeaderCreationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderCreation {
-				return x.OuterHeaderCreation()
-			}
+		if ies.OuterHeaderCreation != nil {
+			return ies.OuterHeaderCreation, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateForwardingParameters:
@@ -46,10 +44,8 @@ func (i *IE) OuterHeaderCreation() (*OuterHeaderCreationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderCreation {
-				return x.OuterHeaderCreation()
-			}
+		if ies.OuterHeaderCreation != nil {
+			return ies.OuterHeaderCreation, nil
 		}
 		return nil, ErrIENotFound
 	case DuplicatingParameters:
@@ -57,10 +53,8 @@ func (i *IE) OuterHeaderCreation() (*OuterHeaderCreationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderCreation {
-				return x.OuterHeaderCreation()
-			}
+		if ies.OuterHeaderCreation != nil {
+			return ies.OuterHeaderCreation, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateDuplicatingParameters:
@@ -68,10 +62,8 @@ func (i *IE) OuterHeaderCreation() (*OuterHeaderCreationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderCreation {
-				return x.OuterHeaderCreation()
-			}
+		if ies.OuterHeaderCreation != nil {
+			return ies.OuterHeaderCreation, nil
 		}
 		return nil, ErrIENotFound
 	case RedundantTransmissionParameters:
@@ -79,10 +71,8 @@ func (i *IE) OuterHeaderCreation() (*OuterHeaderCreationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderCreation {
-				return x.OuterHeaderCreation()
-			}
+		if ies.OuterHeaderCreation != nil {
+			return ies.OuterHeaderCreation, nil
 		}
 		return nil, ErrIENotFound
 	default:

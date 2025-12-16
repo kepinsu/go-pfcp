@@ -10,10 +10,45 @@ func NewQueryPacketRateStatusWithinSessionModificationRequest(ies ...*IE) *IE {
 }
 
 // QueryPacketRateStatus returns the IEs above QueryPacketRateStatus if the type of IE matches.
-func (i *IE) QueryPacketRateStatus() ([]*IE, error) {
+func (i *IE) QueryPacketRateStatus() (*QueryPacketRateStatusFields, error) {
 	if i.Type != QueryPacketRateStatusWithinSessionModificationRequest {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseQueryPacketRateStatusFields(i.Payload)
+}
+
+// QueryPacketRateStatusFields represents a fields contained in QueryPacketRateStatus IE.
+type QueryPacketRateStatusFields struct {
+	QERID uint32
+}
+
+// NewQueryPacketRateStatusFields creates a new QueryPacketRateStatusFields.
+func NewQueryPacketRateStatusFields(QERID uint32) *QueryPacketRateStatusFields {
+	f := &QueryPacketRateStatusFields{QERID: QERID}
+	return f
+}
+
+// ParseQueryPacketRateStatusFields parses b into QueryPacketRateStatusFields.
+func ParseQueryPacketRateStatusFields(b []byte) (*QueryPacketRateStatusFields, error) {
+
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	p := &QueryPacketRateStatusFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case QERID:
+			v, err := ie.QERID()
+			if err != nil {
+				return p, err
+			}
+			p.QERID = v
+		}
+	}
+	return p, nil
 }

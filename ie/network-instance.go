@@ -27,11 +27,11 @@ func (i *IE) NetworkInstance() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			switch i.Type {
-			case NetworkInstance, RedundantTransmissionParameters:
-				return x.NetworkInstance()
-			}
+		if len(ies.NetworkInstance) > 0 {
+			return ies.NetworkInstance, nil
+		}
+		if ies.RedundantTransmissionParameters != nil && len(ies.RedundantTransmissionParameters.NetworkInstance) > 0 {
+			return ies.RedundantTransmissionParameters.NetworkInstance, nil
 		}
 		return "", ErrIENotFound
 	case ForwardingParameters:
@@ -39,10 +39,8 @@ func (i *IE) NetworkInstance() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == NetworkInstance {
-				return x.NetworkInstance()
-			}
+		if len(ies.NetworkInstance) > 0 {
+			return ies.NetworkInstance, nil
 		}
 		return "", ErrIENotFound
 	case UpdateForwardingParameters:
@@ -50,10 +48,8 @@ func (i *IE) NetworkInstance() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == NetworkInstance {
-				return x.NetworkInstance()
-			}
+		if len(ies.NetworkInstance) > 0 {
+			return ies.NetworkInstance, nil
 		}
 		return "", ErrIENotFound
 	case CreateTrafficEndpoint:
@@ -72,10 +68,8 @@ func (i *IE) NetworkInstance() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == NetworkInstance {
-				return x.NetworkInstance()
-			}
+		if len(ies.NetworkInstance) > 0 {
+			return ies.NetworkInstance, nil
 		}
 		return "", ErrIENotFound
 	case RedundantTransmissionParameters:
@@ -83,10 +77,8 @@ func (i *IE) NetworkInstance() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		for _, x := range ies {
-			if x.Type == NetworkInstance {
-				return x.NetworkInstance()
-			}
+		if len(ies.NetworkInstance) > 0 {
+			return ies.NetworkInstance, nil
 		}
 		return "", ErrIENotFound
 	case UEIPAddressPoolInformation:

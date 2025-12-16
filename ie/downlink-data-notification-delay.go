@@ -30,22 +30,15 @@ func (i *IE) DownlinkDataNotificationDelay() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == DownlinkDataNotificationDelay {
-				return x.DownlinkDataNotificationDelay()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.DownlinkDataNotificationDelay, nil
 	case UpdateBARWithinSessionReportResponse,
 		UpdateBARWithinSessionModificationRequest:
 		ies, err := i.UpdateBAR()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == DownlinkDataNotificationDelay {
-				return x.DownlinkDataNotificationDelay()
-			}
+		if ies.DownlinkDataNotificationDelay > 0 {
+			return ies.DownlinkDataNotificationDelay, nil
 		}
 		return 0, ErrIENotFound
 	default:

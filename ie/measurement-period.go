@@ -27,7 +27,7 @@ func (i *IE) MeasurementPeriod() (time.Duration, error) {
 	case MeasurementPeriod:
 		return time.Duration(binary.BigEndian.Uint32(i.Payload[0:4])) * time.Second, nil
 	case CreateURR:
-		ies, err := i.CreateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -38,7 +38,7 @@ func (i *IE) MeasurementPeriod() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -49,7 +49,7 @@ func (i *IE) MeasurementPeriod() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case QoSMonitoringPerQoSFlowControlInformation:
-		ies, err := i.QoSMonitoringPerQoSFlowControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

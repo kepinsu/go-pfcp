@@ -63,7 +63,10 @@ func TestUint16IEs(t *testing.T) {
 			description: "Ethertype/PDI",
 			structured: ie.NewPDI(
 				ie.NewSourceInterface(ie.SrcInterfaceAccess),
-				ie.NewEthertype(0xffff),
+				ie.NewEthernetPacketFilter(
+					ie.NewEthernetFilterID(0xffffffff),
+					ie.NewEthertype(0xffff),
+				),
 			),
 			decoded:     0xffff,
 			decoderFunc: func(i *ie.IE) (uint16, error) { return i.Ethertype() },
@@ -111,6 +114,21 @@ func TestUint16IEs(t *testing.T) {
 			),
 			decoded:     0x1111,
 			decoderFunc: func(i *ie.IE) (uint16, error) { return i.MARID() },
+		}, {
+			description: "MBSUnicastParametersID",
+			structured:  ie.NewMBSUnicastParametersID(1),
+			decoded:     0x1,
+			decoderFunc: func(i *ie.IE) (uint16, error) { return i.MBSUnicastParametersID() },
+		}, {
+			description: "MBSUnicastParametersID/AddMBSUnicastParameters",
+			structured:  ie.NewAddMBSUnicastParameters(ie.NewMBSUnicastParametersID(1)),
+			decoded:     0x1,
+			decoderFunc: func(i *ie.IE) (uint16, error) { return i.MBSUnicastParametersID() },
+		}, {
+			description: "MBSUnicastParametersID/RemoveMBSUnicastParameters",
+			structured:  ie.NewRemoveMBSUnicastParameters(ie.NewMBSUnicastParametersID(1)),
+			decoded:     0x1,
+			decoderFunc: func(i *ie.IE) (uint16, error) { return i.MBSUnicastParametersID() },
 		}, {
 			description: "NumberOfReports",
 			structured:  ie.NewNumberOfReports(0x1111),

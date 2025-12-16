@@ -10,19 +10,17 @@ func NewAggregatedURRs(ies ...*IE) *IE {
 }
 
 // AggregatedURRs returns the IEs above AggregatedURRs if the type of IE matches.
-func (i *IE) AggregatedURRs() ([]*IE, error) {
+func (i *IE) AggregatedURRs() (*AggregatedURRsField, error) {
 	switch i.Type {
 	case AggregatedURRs:
-		return ParseMultiIEs(i.Payload)
+		return ParseAggregatedURRsField(i.Payload)
 	case CreateURR:
 		ies, err := i.CreateURR()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == AggregatedURRs {
-				return x.AggregatedURRs()
-			}
+		if len(ies.AggregatedURRs) > 0 {
+			return ies.AggregatedURRs[0], nil
 		}
 		return nil, ErrIENotFound
 	case UpdateURR:
@@ -30,13 +28,44 @@ func (i *IE) AggregatedURRs() ([]*IE, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == AggregatedURRs {
-				return x.AggregatedURRs()
-			}
+		if len(ies.AggregatedURRs) > 0 {
+			return ies.AggregatedURRs[0], nil
 		}
 		return nil, ErrIENotFound
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
+}
+
+// AggregatedURRsField is a set of fields in AggregatedURRs IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type AggregatedURRsField struct {
+	AggregatedURRID uint32
+	Multiplier      *IE
+}
+
+func ParseAggregatedURRsField(b []byte) (*AggregatedURRsField, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	a := &AggregatedURRsField{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case AggregatedURRID:
+			urrid, err := ie.AggregatedURRID()
+			if err != nil {
+				return a, err
+			}
+			a.AggregatedURRID = urrid
+		case Multiplier:
+			a.Multiplier = ie
+		}
+	}
+	return a, nil
 }

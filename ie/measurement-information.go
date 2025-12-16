@@ -19,14 +19,12 @@ func (i *IE) MeasurementInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == MeasurementInformation {
-				return x.MeasurementInformation()
-			}
+		if ies.MeasurementInformation != nil {
+			return ies.MeasurementInformation.MeasurementInformation()
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

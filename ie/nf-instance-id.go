@@ -22,17 +22,6 @@ func (i *IE) NFInstanceID() ([]byte, error) {
 	switch i.Type {
 	case NFInstanceID:
 		return i.Payload[:16], nil
-	case EthernetPacketFilter:
-		ies, err := i.EthernetPacketFilter()
-		if err != nil {
-			return nil, err
-		}
-		for _, x := range ies {
-			if x.Type == NFInstanceID {
-				return x.NFInstanceID()
-			}
-		}
-		return nil, ErrIENotFound
 	default:
 		return nil, &InvalidTypeError{Type: i.Type}
 	}

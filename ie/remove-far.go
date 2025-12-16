@@ -10,10 +10,42 @@ func NewRemoveFAR(far *IE) *IE {
 }
 
 // RemoveFAR returns the IEs above RemoveFAR if the type of IE matches.
-func (i *IE) RemoveFAR() ([]*IE, error) {
+func (i *IE) RemoveFAR() (*RemoveFARFields, error) {
 	if i.Type != RemoveFAR {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	return ParseRemoveFARFields(i.Payload)
+}
+
+// RemoveFARFields is a set of fields in Remove FAR IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type RemoveFARFields struct {
+	FARID uint32
+}
+
+// ParseRemoveFARFields returns the IEs above RemoveMBSUnicastParameters.
+func ParseRemoveFARFields(b []byte) (*RemoveFARFields, error) {
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	f := &RemoveFARFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+
+		switch ie.Type {
+		case FARID:
+			v, err := ie.FARID()
+			if err != nil {
+				return f, err
+			}
+			f.FARID = v
+		}
+	}
+	return f, nil
 }

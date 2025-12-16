@@ -37,10 +37,8 @@ func (i *IE) PacketRateStatus() (*PacketRateStatusFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketRateStatus {
-				return x.PacketRateStatus()
-			}
+		if ies.PacketRateStatus != nil {
+			return ies.PacketRateStatus, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateQER:
@@ -48,10 +46,8 @@ func (i *IE) PacketRateStatus() (*PacketRateStatusFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == PacketRateStatus {
-				return x.PacketRateStatus()
-			}
+		if ies.PacketRateStatus != nil {
+			return ies.PacketRateStatus, nil
 		}
 		return nil, ErrIENotFound
 	case PacketRateStatusReport:

@@ -17,3 +17,49 @@ func (i *IE) UEIPAddressPoolInformation() ([]*IE, error) {
 
 	return ParseMultiIEs(i.Payload)
 }
+
+// UEIPAddressPoolInformationFields represents a fields contained in UEIPAddressPoolInformation IE.
+type UEIPAddressPoolInformationFields struct {
+	UEIPAddressPoolIdentity []*IE
+	NetworkInstance         string
+	SNSSAI                  []byte
+	IPVersion               uint8
+}
+
+// ParseUEIPAddressPoolInformationFields parses b into UEIPAddressPoolInformationFields.
+func ParseUEIPAddressPoolInformationFields(b []byte) (*UEIPAddressPoolInformationFields, error) {
+
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	p := &UEIPAddressPoolInformationFields{}
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case UEIPAddressPoolIdentity:
+			p.UEIPAddressPoolIdentity = append(p.UEIPAddressPoolIdentity, ie)
+		case NetworkInstance:
+			v, err := ie.NetworkInstance()
+			if err != nil {
+				return p, err
+			}
+			p.NetworkInstance = v
+		case SNSSAI:
+			v, err := ie.SNSSAI()
+			if err != nil {
+				return p, err
+			}
+			p.SNSSAI = v
+		case IPVersion:
+			v, err := ie.IPVersion()
+			if err != nil {
+				return p, err
+			}
+			p.IPVersion = v
+		}
+	}
+	return p, nil
+}

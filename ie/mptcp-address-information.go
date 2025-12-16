@@ -42,10 +42,8 @@ func (i *IE) MPTCPAddressInformation() (*MPTCPAddressInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MPTCPParameters {
-				return x.MPTCPAddressInformation()
-			}
+		if ies.MPTCPParameters != nil && ies.MPTCPParameters.MPTCPAddressInformation != nil {
+			return ies.MPTCPParameters.MPTCPAddressInformation, nil
 		}
 		return nil, ErrIENotFound
 	case MPTCPParameters:
@@ -53,10 +51,8 @@ func (i *IE) MPTCPAddressInformation() (*MPTCPAddressInformationFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MPTCPAddressInformation {
-				return x.MPTCPAddressInformation()
-			}
+		if ies.MPTCPAddressInformation != nil {
+			return ies.MPTCPAddressInformation, nil
 		}
 		return nil, ErrIENotFound
 	default:

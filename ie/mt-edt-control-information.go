@@ -19,12 +19,7 @@ func (i *IE) MTEDTControlInformation() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == MTEDTControlInformation {
-				return x.MTEDTControlInformation()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.MTEDTControlInformation, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

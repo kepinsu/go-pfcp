@@ -15,7 +15,7 @@ func (i *IE) DLDataPacketsSize() (uint16, error) {
 	case DLDataPacketsSize:
 		return i.ValueAsUint16()
 	case DownlinkDataReport:
-		ies, err := i.DownlinkDataReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

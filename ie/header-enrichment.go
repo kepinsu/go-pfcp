@@ -38,10 +38,8 @@ func (i *IE) HeaderEnrichment() (*HeaderEnrichmentFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == HeaderEnrichment {
-				return x.HeaderEnrichment()
-			}
+		if ies.HeaderEnrichment != nil {
+			return ies.HeaderEnrichment, nil
 		}
 		return nil, ErrIENotFound
 	case UpdateForwardingParameters:
@@ -49,10 +47,8 @@ func (i *IE) HeaderEnrichment() (*HeaderEnrichmentFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == HeaderEnrichment {
-				return x.HeaderEnrichment()
-			}
+		if ies.HeaderEnrichment != nil {
+			return ies.HeaderEnrichment, nil
 		}
 		return nil, ErrIENotFound
 	default:

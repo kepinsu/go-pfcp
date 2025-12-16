@@ -28,10 +28,8 @@ func (i *IE) OuterHeaderRemoval() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderRemoval {
-				return x.OuterHeaderRemoval()
-			}
+		if len(ies.OuterHeaderRemoval) > 0 {
+			return ies.OuterHeaderRemoval, nil
 		}
 		return nil, ErrIENotFound
 	case UpdatePDR:
@@ -39,10 +37,8 @@ func (i *IE) OuterHeaderRemoval() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == OuterHeaderRemoval {
-				return x.OuterHeaderRemoval()
-			}
+		if len(ies.OuterHeaderRemoval) > 0 {
+			return ies.OuterHeaderRemoval, nil
 		}
 		return nil, ErrIENotFound
 	default:

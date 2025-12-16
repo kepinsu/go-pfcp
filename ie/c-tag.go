@@ -36,10 +36,8 @@ func (i *IE) CTAG() (*CTAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetPacketFilter {
-				return x.CTAG()
-			}
+		if ies.EthernetPacketFilter != nil {
+			return ies.EthernetPacketFilter.CTag, nil
 		}
 		return nil, ErrIENotFound
 	case EthernetPacketFilter:
@@ -47,10 +45,8 @@ func (i *IE) CTAG() (*CTAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == CTAG {
-				return x.CTAG()
-			}
+		if ies.CTag != nil {
+			return ies.CTag, nil
 		}
 		return nil, ErrIENotFound
 	case MACAddressesDetected:
@@ -70,10 +66,8 @@ func (i *IE) CTAG() (*CTAGFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == MACAddressesDetected {
-				return x.CTAG()
-			}
+		if ies.MACAddressesDetected != nil && len(ies.MACAddressesDetected.CTAG) > 0 {
+			return ParseCTAGFields(ies.MACAddressesDetected.CTAG)
 		}
 		return nil, ErrIENotFound
 	default:

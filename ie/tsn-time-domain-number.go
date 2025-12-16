@@ -15,7 +15,7 @@ func (i *IE) TSNTimeDomainNumber() (uint8, error) {
 	case TSNTimeDomainNumber:
 		return i.ValueAsUint8()
 	case ClockDriftControlInformation:
-		ies, err := i.ClockDriftControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -27,7 +27,7 @@ func (i *IE) TSNTimeDomainNumber() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case ClockDriftReport:
-		ies, err := i.ClockDriftReport()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

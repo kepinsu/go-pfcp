@@ -19,23 +19,13 @@ func (i *IE) InactivityDetectionTime() (uint32, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == InactivityDetectionTime {
-				return x.InactivityDetectionTime()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.InactivityDetectionTime, nil
 	case UpdateURR:
 		ies, err := i.UpdateURR()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == InactivityDetectionTime {
-				return x.InactivityDetectionTime()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.InactivityDetectionTime, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

@@ -35,21 +35,14 @@ func (i *IE) DLFlowLevelMarking() (*DLFlowLevelMarkingFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == DLFlowLevelMarking {
-				return x.DLFlowLevelMarking()
-			}
-		}
-		return nil, ErrIENotFound
+		return ies.DLFlowLevelMarking, nil
 	case UpdateQER:
 		ies, err := i.UpdateQER()
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == DLFlowLevelMarking {
-				return x.DLFlowLevelMarking()
-			}
+		if ies.DLFlowLevelMarking != nil {
+			return ies.DLFlowLevelMarking, nil
 		}
 		return nil, ErrIENotFound
 	default:

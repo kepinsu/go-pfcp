@@ -19,14 +19,12 @@ func (i *IE) MeasurementMethod() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == MeasurementMethod {
-				return x.MeasurementMethod()
-			}
+		if ies.MeasurementInformation != nil {
+			return ies.MeasurementInformation.MeasurementInformation()
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -37,7 +35,7 @@ func (i *IE) MeasurementMethod() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

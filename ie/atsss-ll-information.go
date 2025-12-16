@@ -15,7 +15,7 @@ func (i *IE) ATSSSLLInformation() (uint8, error) {
 	case ATSSSLLInformation:
 		return i.ValueAsUint8()
 	case ATSSSControlParameters:
-		ies, err := i.ATSSSControlParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -26,7 +26,7 @@ func (i *IE) ATSSSLLInformation() (uint8, error) {
 		}
 		return 0, ErrIENotFound
 	case ATSSSLLParameters:
-		ies, err := i.ATSSSLLParameters()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

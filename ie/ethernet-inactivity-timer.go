@@ -31,23 +31,13 @@ func (i *IE) EthernetInactivityTimer() (time.Duration, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetInactivityTimer {
-				return x.EthernetInactivityTimer()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.EthernetInactivityTimer, nil
 	case UpdateURR:
 		ies, err := i.UpdateURR()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == EthernetInactivityTimer {
-				return x.EthernetInactivityTimer()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.EthernetInactivityTimer, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

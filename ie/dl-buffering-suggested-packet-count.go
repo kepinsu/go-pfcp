@@ -31,11 +31,7 @@ func (i *IE) DLBufferingSuggestedPacketCount() (uint16, error) {
 
 		return 0, io.ErrUnexpectedEOF
 	case UpdateBARWithinSessionReportResponse:
-		ies, err := i.UpdateBAR()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == DLBufferingSuggestedPacketCount {
 				return x.DLBufferingSuggestedPacketCount()
 			}

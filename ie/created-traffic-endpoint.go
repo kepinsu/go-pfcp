@@ -10,12 +10,77 @@ func NewCreatedTrafficEndpoint(ies ...*IE) *IE {
 }
 
 // CreatedTrafficEndpoint returns the IEs above CreatedTrafficEndpoint if the type of IE matches.
-func (i *IE) CreatedTrafficEndpoint() ([]*IE, error) {
+func (i *IE) CreatedTrafficEndpoint() (*CreatedTrafficEndpointFields, error) {
 	if i.Type != CreatedTrafficEndpoint {
 		return nil, &InvalidTypeError{Type: i.Type}
 	}
 
-	return ParseMultiIEs(i.Payload)
+	// Check if the ie.Parse have called or not
+	if len(i.ChildIEs) > 0 {
+		p := &CreatedTrafficEndpointFields{}
+		if err := p.ParseIEs(i.ChildIEs...); err != nil {
+			return p, err
+		}
+		return p, nil
+	}
+	// If the ChildIEs not already parsed
+	return ParseCreatedTrafficEndpointFields(i.Payload)
+}
+
+// CreatedTrafficEndpointFields is a set of fields in CreatedTrafficEndpoint IE.
+//
+// The contained fields are of type struct, as they are too complex to handle with
+// existing (standard) types in Go.
+type CreatedTrafficEndpointFields struct {
+	TrafficEndpointID  uint8
+	LocalFTEID         []*FTEIDFields
+	UEIPAddress        []*UEIPAddressFields
+	LocalIngressTunnel *IE
+}
+
+// ParseCreatedTrafficEndpointFields returns the IEs above CreatedTrafficEndpoint
+func ParseCreatedTrafficEndpointFields(b []byte) (*CreatedTrafficEndpointFields, error) {
+
+	// Parse all IES heres
+	ies, err := ParseMultiIEs(b)
+	if err != nil {
+		return nil, err
+	}
+	traffic := &CreatedTrafficEndpointFields{}
+	err = traffic.ParseIEs(ies...)
+	return traffic, err
+}
+
+// ParseIEs will iterator over all childs IE to avoid to use Parse or ParseMultiIEs any time we iterate in IE
+func (c *CreatedTrafficEndpointFields) ParseIEs(ies ...*IE) error {
+	for _, ie := range ies {
+		if ie == nil {
+			continue
+		}
+		switch ie.Type {
+		case TrafficEndpointID:
+			id, err := ie.TrafficEndpointID()
+			if err != nil {
+				return err
+			}
+			c.TrafficEndpointID = id
+		case FTEID:
+			v, err := ie.FTEID()
+			if err != nil {
+				return err
+			}
+			c.LocalFTEID = append(c.LocalFTEID, v)
+		case UEIPAddress:
+			v, err := ie.UEIPAddress()
+			if err != nil {
+				return err
+			}
+			c.UEIPAddress = append(c.UEIPAddress, v)
+		case LocalIngressTunnel:
+			c.LocalIngressTunnel = ie
+		}
+	}
+	return nil
 }
 
 // LocalFTEID returns FTEID that is found first in a grouped IE in structured format
@@ -29,10 +94,8 @@ func (i *IE) LocalFTEID() (*FTEIDFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == FTEID {
-				return x.FTEID()
-			}
+		for _, x := range ies.LocalFTEID {
+			return x, nil
 		}
 		return nil, ErrIENotFound
 	default:
@@ -55,14 +118,11 @@ func (i *IE) LocalFTEIDN(n int) (*FTEIDFields, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		c := 0
-		for _, x := range ies {
-			if x.Type == FTEID {
-				c++
-				if c == n {
-					return x.FTEID()
-				}
+		for _, x := range ies.LocalFTEID {
+			c++
+			if c == n {
+				return x, nil
 			}
 		}
 		return nil, ErrIENotFound

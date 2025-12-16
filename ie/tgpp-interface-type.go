@@ -46,22 +46,14 @@ func (i *IE) TGPPInterfaceType() (uint8, error) {
 	case TGPPInterfaceType:
 		return i.Payload[0] & 0x3f, nil
 	case ForwardingParameters:
-		ies, err := i.ForwardingParameters()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == TGPPInterfaceType {
 				return x.TGPPInterfaceType()
 			}
 		}
 		return 0, ErrIENotFound
 	case UpdateForwardingParameters:
-		ies, err := i.UpdateForwardingParameters()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == TGPPInterfaceType {
 				return x.TGPPInterfaceType()
 			}

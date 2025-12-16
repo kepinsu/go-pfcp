@@ -29,10 +29,8 @@ func (i *IE) UsageReportTrigger() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == UsageReportTrigger {
-				return x.UsageReportTrigger()
-			}
+		if len(ies.UsageReportTrigger) > 0 {
+			return ies.UsageReportTrigger, nil
 		}
 		return nil, ErrIENotFound
 	default:

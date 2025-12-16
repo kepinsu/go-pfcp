@@ -26,7 +26,7 @@ func (i *IE) SubsequentTimeThreshold() (time.Duration, error) {
 		t := binary.BigEndian.Uint32(i.Payload[0:4])
 		return time.Duration(t) * time.Second, nil
 	case CreateURR:
-		ies, err := i.CreateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -37,7 +37,7 @@ func (i *IE) SubsequentTimeThreshold() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
-		ies, err := i.UpdateURR()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -48,7 +48,7 @@ func (i *IE) SubsequentTimeThreshold() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case AdditionalMonitoringTime:
-		ies, err := i.AdditionalMonitoringTime()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

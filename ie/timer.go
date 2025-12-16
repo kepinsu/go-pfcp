@@ -78,7 +78,7 @@ func (i *IE) Timer() (time.Duration, error) {
 		}
 		return d, nil
 	case OverloadControlInformation:
-		ies, err := i.OverloadControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -89,7 +89,7 @@ func (i *IE) Timer() (time.Duration, error) {
 		}
 		return 0, ErrIENotFound
 	case GTPUPathQoSControlInformation:
-		ies, err := i.GTPUPathQoSControlInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}

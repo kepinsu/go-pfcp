@@ -40,10 +40,8 @@ func (i *IE) FlowInformation() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == FlowInformation {
-				return x.FlowInformation()
-			}
+		if len(ies.FlowInformation) > 0 {
+			return ies.FlowInformation, nil
 		}
 		return nil, ErrIENotFound
 	case UsageReportWithinSessionReportRequest:
@@ -51,10 +49,9 @@ func (i *IE) FlowInformation() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == ApplicationDetectionInformation {
-				return x.FlowInformation()
-			}
+		if ies.ApplicationDetectionInformation != nil &&
+			len(ies.ApplicationDetectionInformation.FlowInformation) > 0 {
+			return ies.ApplicationDetectionInformation.FlowInformation, nil
 		}
 		return nil, ErrIENotFound
 	default:
@@ -71,7 +68,7 @@ func (i *IE) FlowDirection() (uint8, error) {
 		}
 		return i.Payload[0] & 0x07, nil
 	case ApplicationDetectionInformation:
-		ies, err := i.ApplicationDetectionInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return 0, err
 		}
@@ -97,7 +94,7 @@ func (i *IE) FlowDescription() (string, error) {
 
 		return string(i.Payload[3 : 3+l]), nil
 	case ApplicationDetectionInformation:
-		ies, err := i.ApplicationDetectionInformation()
+		ies, err := ParseMultiIEs(i.Payload)
 		if err != nil {
 			return "", err
 		}

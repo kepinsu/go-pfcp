@@ -22,11 +22,7 @@ func (i *IE) TimeOfLastPacket() (time.Time, error) {
 	case UsageReportWithinSessionModificationResponse,
 		UsageReportWithinSessionDeletionResponse,
 		UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
-		if err != nil {
-			return time.Time{}, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == TimeOfLastPacket {
 				return x.TimeOfLastPacket()
 			}

@@ -38,10 +38,8 @@ func (i *IE) VolumeMeasurement() (*VolumeMeasurementFields, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, x := range ies {
-			if x.Type == VolumeMeasurement {
-				return x.VolumeMeasurement()
-			}
+		if ies.VolumeMeasurement != nil {
+			return ies.VolumeMeasurement, nil
 		}
 		return nil, ErrIENotFound
 	default:

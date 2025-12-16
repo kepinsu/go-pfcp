@@ -19,11 +19,11 @@ func (i *IE) Weight() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
-				return x.Weight()
-			}
+		if ies.TGPPAccessForwardingActionInformation != nil {
+			return ies.TGPPAccessForwardingActionInformation.Weight, nil
+		}
+		if ies.NonTGPPAccessForwardingActionInformation != nil {
+			return ies.NonTGPPAccessForwardingActionInformation.Weight, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
@@ -31,11 +31,11 @@ func (i *IE) Weight() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			switch x.Type {
-			case TGPPAccessForwardingActionInformation, NonTGPPAccessForwardingActionInformation:
-				return x.Weight()
-			}
+		if ies.TGPPAccessForwardingActionInformation != nil {
+			return ies.TGPPAccessForwardingActionInformation.Weight, nil
+		}
+		if ies.NonTGPPAccessForwardingActionInformation != nil {
+			return ies.NonTGPPAccessForwardingActionInformation.Weight, nil
 		}
 		return 0, ErrIENotFound
 	case TGPPAccessForwardingActionInformation:
@@ -43,45 +43,26 @@ func (i *IE) Weight() (uint8, error) {
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Weight {
-				return x.Weight()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Weight, nil
 	case NonTGPPAccessForwardingActionInformation:
 		ies, err := i.NonTGPPAccessForwardingActionInformation()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Weight {
-				return x.Weight()
-			}
-		}
-		return 0, ErrIENotFound
+
+		return ies.Weight, nil
 	case UpdateTGPPAccessForwardingActionInformation:
 		ies, err := i.UpdateTGPPAccessForwardingActionInformation()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Weight {
-				return x.Weight()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Weight, nil
 	case UpdateNonTGPPAccessForwardingActionInformation:
 		ies, err := i.UpdateNonTGPPAccessForwardingActionInformation()
 		if err != nil {
 			return 0, err
 		}
-		for _, x := range ies {
-			if x.Type == Weight {
-				return x.Weight()
-			}
-		}
-		return 0, ErrIENotFound
+		return ies.Weight, nil
 	default:
 		return 0, &InvalidTypeError{Type: i.Type}
 	}

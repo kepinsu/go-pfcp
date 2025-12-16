@@ -17,11 +17,7 @@ func (i *IE) URSEQN() (uint32, error) {
 	case UsageReportWithinSessionModificationResponse,
 		UsageReportWithinSessionDeletionResponse,
 		UsageReportWithinSessionReportRequest:
-		ies, err := i.UsageReport()
-		if err != nil {
-			return 0, err
-		}
-		for _, x := range ies {
+		for _, x := range i.ChildIEs {
 			if x.Type == URSEQN {
 				return x.URSEQN()
 			}

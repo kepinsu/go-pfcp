@@ -4,6 +4,18 @@
 
 package ie
 
+// masks to had uint8 from boolean
+const (
+	firstBit   uint8 = 1
+	secondBit  uint8 = 1 << 1
+	thirdBit   uint8 = 1 << 2
+	fourthBit  uint8 = 1 << 3
+	fivethBit  uint8 = 1 << 4
+	sixthBit   uint8 = 1 << 5
+	seventhBit uint8 = 1 << 6
+	lastBit    uint8 = 1 << 7
+)
+
 func has8thBit(f uint8) bool {
 	return (f&0x80)>>7 == 1
 }
