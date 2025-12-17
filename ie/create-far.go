@@ -59,11 +59,11 @@ func ParseCreateFARFields(b []byte) (*CreateFARFields, error) {
 			}
 			far.ApplyAction = apply
 		case ForwardingParameters:
-			apply, err := ie.ApplyAction()
+			apply, err := ie.ForwardingParameters()
 			if err != nil {
 				return far, err
 			}
-			far.ApplyAction = apply
+			far.ForwardingParameters = apply
 		case DuplicatingParameters:
 			duplicating, err := ie.DuplicatingParameters()
 			if err != nil {
