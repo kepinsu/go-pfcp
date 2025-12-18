@@ -38,8 +38,7 @@ func (i *IE) OffendingIEInformation() (*OffendingIEInformationFields, error) {
 			if ie == nil {
 				continue
 			}
-			switch ie.Type {
-			case OffendingIEInformation:
+			if ie.Type == OffendingIEInformation {
 				return i.OffendingIEInformation()
 			}
 		}

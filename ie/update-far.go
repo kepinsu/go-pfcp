@@ -81,6 +81,12 @@ func (far *UpdateFARFields) ParseIEs(ies ...*IE) error {
 				return err
 			}
 			far.ApplyAction = apply
+		case UpdateForwardingParameters:
+			v, err := ie.UpdateForwardingParameters()
+			if err != nil {
+				return err
+			}
+			far.UpdateForwardingParameters = v
 		case UpdateDuplicatingParameters:
 			duplicating, err := ie.UpdateDuplicatingParameters()
 			if err != nil {

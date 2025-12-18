@@ -38,8 +38,7 @@ func ParseProvideRDSConfigurationInformationFields(b []byte) (*ProvideRDSConfigu
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case RDSConfigurationInformation:
+		if ie.Type == RDSConfigurationInformation {
 			v, err := ie.RDSConfigurationInformation()
 			if err != nil {
 				return p, err

@@ -38,8 +38,7 @@ func ParseRemoveMARFields(b []byte) (*RemoveMARFields, error) {
 			continue
 		}
 
-		switch ie.Type {
-		case MARID:
+		if ie.Type == MARID {
 			v, err := ie.MARID()
 			if err != nil {
 				return f, err

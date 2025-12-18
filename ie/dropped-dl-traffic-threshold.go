@@ -133,15 +133,17 @@ func (d *DroppedDLTrafficThresholdFields) MarshalTo(b []byte) error {
 		return io.ErrUnexpectedEOF
 	}
 	b[0] = d.Flags
+
+	switch {
 	// Had Both
-	if d.HasDLBY() && d.HasDLPA() {
+	case d.HasDLBY() && d.HasDLPA():
 		binary.BigEndian.PutUint64(b[1:9], d.Packets)
 		binary.BigEndian.PutUint64(b[9:17], d.Bytes)
 		// Has DLBY Only
-	} else if d.HasDLBY() {
+	case d.HasDLBY():
 		binary.BigEndian.PutUint64(b[1:9], d.Bytes)
 		// Has DLPA Only
-	} else if d.HasDLPA() {
+	case d.HasDLPA():
 		binary.BigEndian.PutUint64(b[1:9], d.Packets)
 	}
 	return nil
@@ -149,12 +151,17 @@ func (d *DroppedDLTrafficThresholdFields) MarshalTo(b []byte) error {
 
 // MarshalLen returns field length in integer.
 func (d *DroppedDLTrafficThresholdFields) MarshalLen() int {
-	if d.HasDLBY() && d.HasDLPA() {
+	switch {
+	// Had Both
+	case d.HasDLBY() && d.HasDLPA():
 		return 17
-	} else if d.HasDLBY() {
+		// Has DLBY Only
+	case d.HasDLBY():
 		return 9
-	} else if d.HasDLPA() {
+		// Has DLPA Only
+	case d.HasDLPA():
 		return 9
+	default:
+		return 1
 	}
-	return 1
 }

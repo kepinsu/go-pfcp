@@ -65,6 +65,18 @@ func (s *SessionReportFields) ParseIEs(ies ...*IE) error {
 				return nil
 			}
 			s.SRRID = v
+		case AccessAvailabilityReport:
+			v, err := i.AccessAvailabilityReport()
+			if err != nil {
+				return nil
+			}
+			s.AccessAvailabilityReport = v
+		case QoSMonitoringReport:
+			v, err := i.QoSMonitoringReport()
+			if err != nil {
+				return nil
+			}
+			s.QoSMonitoringReport = v
 		}
 	}
 	return nil

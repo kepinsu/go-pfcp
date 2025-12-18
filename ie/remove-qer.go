@@ -36,9 +36,7 @@ func ParseRemoveQERFields(b []byte) (*RemoveQERFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case QERID:
+		if ie.Type == QERID {
 			v, err := ie.QERID()
 			if err != nil {
 				return f, err

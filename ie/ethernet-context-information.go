@@ -53,8 +53,7 @@ func (e *EthernetContextInformationFields) ParseIEs(ies ...*IE) error {
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case MACAddressesDetected:
+		if ie.Type == MACAddressesDetected {
 			a, err := ie.MACAddressesDetected()
 			if err != nil {
 				return err

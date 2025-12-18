@@ -37,9 +37,7 @@ func ParseRemoveURRFields(b []byte) (*RemoveURRFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case URRID:
+		if ie.Type == URRID {
 			v, err := ie.URRID()
 			if err != nil {
 				return f, err

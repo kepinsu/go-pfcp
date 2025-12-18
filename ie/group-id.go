@@ -20,8 +20,7 @@ func (i *IE) GroupID() ([]byte, error) {
 			return nil, err
 		}
 		for _, ie := range ies {
-			switch ie.Type {
-			case GroupID:
+			if ie.Type == GroupID {
 				return ie.GroupID()
 			}
 		}

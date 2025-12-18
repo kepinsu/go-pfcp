@@ -49,7 +49,7 @@ func (i *IE) FARID() (uint32, error) {
 			return 0, err
 		}
 		if ies != nil {
-			return uint32(ies.FarIdForQuotaAction), nil
+			return ies.FarIDForQuotaAction, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateURR:
@@ -74,7 +74,7 @@ func (i *IE) FARID() (uint32, error) {
 		if ies.TGPPAccessForwardingActionInformation != nil {
 			return ies.TGPPAccessForwardingActionInformation.FARID, nil
 		} else if ies.NonTGPPAccessForwardingActionInformation != nil {
-			return uint32(ies.NonTGPPAccessForwardingActionInformation.FARID), nil
+			return ies.NonTGPPAccessForwardingActionInformation.FARID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateMAR:
@@ -91,7 +91,7 @@ func (i *IE) FARID() (uint32, error) {
 			return 0, err
 		}
 		if ies != nil {
-			return uint32(ies.FARID), nil
+			return ies.FARID, nil
 		}
 		return 0, ErrIENotFound
 	case NonTGPPAccessForwardingActionInformation:
@@ -100,7 +100,7 @@ func (i *IE) FARID() (uint32, error) {
 			return 0, err
 		}
 		if ies != nil {
-			return uint32(ies.FARID), nil
+			return ies.FARID, nil
 		}
 		return 0, ErrIENotFound
 	case UpdateTGPPAccessForwardingActionInformation:

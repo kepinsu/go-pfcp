@@ -24,7 +24,7 @@ func (i *IE) CreateURR() (*CreateURRFields, error) {
 // The contained fields are of type struct, as they are too complex to handle with
 // existing (standard) types in Go.
 type CreateURRFields struct {
-	// For Measurement Method and ReporingTrigger is more simplier to use direct the IE
+	// For Measurement Method and ReporingTrigger is more simpler to use direct the IE
 	// structure
 
 	URRID                                uint32
@@ -52,7 +52,7 @@ type CreateURRFields struct {
 	MeasurementInformation               *IE
 	AggregatedURRs                       []*AggregatedURRsField
 	TimeQuotaMechanism                   []byte
-	FarIdForQuotaAction                  uint32
+	FarIDForQuotaAction                  uint32
 	EthernetInactivityTimer              time.Duration
 	AdditionalMonitoringTime             *AdditionalMonitoringTimeFields
 	NumberOfReports                      uint16
@@ -210,7 +210,7 @@ func ParseCreateURRFields(b []byte) (*CreateURRFields, error) {
 			if err != nil {
 				return u, err
 			}
-			u.FarIdForQuotaAction = id
+			u.FarIDForQuotaAction = id
 		case EthernetInactivityTimer:
 			timer, err := ie.EthernetInactivityTimer()
 			if err != nil {

@@ -37,9 +37,7 @@ func ParseRemoveSRRFields(b []byte) (*RemoveSRRFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case SRRID:
+		if ie.Type == SRRID {
 			v, err := ie.SRRID()
 			if err != nil {
 				return f, err

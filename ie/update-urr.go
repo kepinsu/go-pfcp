@@ -34,7 +34,7 @@ func (i *IE) UpdateURR() (*UpdateURRFields, error) {
 // The contained fields are of type struct, as they are too complex to handle with
 // existing (standard) types in Go.
 type UpdateURRFields struct {
-	// For Measurement Method and ReporingTrigger is more simplier to use direct the IE
+	// For Measurement Method and ReporingTrigger is more simpler to use direct the IE
 	// structure
 
 	URRID                                uint32

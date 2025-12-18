@@ -68,8 +68,7 @@ func (f *PFDContextFields) ParseIEs(ies ...*IE) error {
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case PFDContents:
+		if ie.Type == PFDContents {
 			v, err := ie.PFDContents()
 			if err != nil {
 				return err

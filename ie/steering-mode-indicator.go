@@ -9,9 +9,9 @@ import (
 )
 
 // NewSteeringModeIndicator creates a new SteeringModeIndicator IE.
-func NewSteeringModeIndicator(UEAI, rtt bool) *IE {
+func NewSteeringModeIndicator(ueai, rtt bool) *IE {
 
-	fields := NewSteeringModeIndicatorFields(UEAI, rtt)
+	fields := NewSteeringModeIndicatorFields(ueai, rtt)
 	b, err := fields.Marshal()
 	if err != nil {
 		return nil
@@ -29,9 +29,9 @@ type SteeringModeIndicatorFields struct {
 }
 
 // NewSteeringModeIndicatorFields creates a new NewSteeringModeIndicatorFields.
-func NewSteeringModeIndicatorFields(UEAI, rtt bool) *SteeringModeIndicatorFields {
+func NewSteeringModeIndicatorFields(ueai, rtt bool) *SteeringModeIndicatorFields {
 	var flags uint8
-	if UEAI {
+	if ueai {
 		flags |= 0x02
 	}
 	if rtt {

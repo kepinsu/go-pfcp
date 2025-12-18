@@ -46,9 +46,7 @@ func ParseRemoveMBSUnicastParametersFields(b []byte) (*RemoveMBSUnicastParameter
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case MBSUnicastParametersID:
+		if ie.Type == MBSUnicastParametersID {
 			v, err := ie.MBSUnicastParametersID()
 			if err != nil {
 				return f, err

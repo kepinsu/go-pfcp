@@ -37,18 +37,17 @@ func ParsePFCPSessionRetentionInformationFields(b []byte) (*PFCPSessionRetention
 }
 
 // ParseIEs will iterator over all childs IE to avoid to use Parse or ParseMultiIEs any time we iterate in IE
-func (far *PFCPSessionRetentionInformationFields) ParseIEs(ies ...*IE) error {
+func (p *PFCPSessionRetentionInformationFields) ParseIEs(ies ...*IE) error {
 	for _, ie := range ies {
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case CPPFCPEntityIPAddress:
+		if ie.Type == CPPFCPEntityIPAddress {
 			v, err := ie.CPPFCPEntityIPAddress()
 			if err != nil {
 				return err
 			}
-			far.CPPFCPEntityIPAddress = v
+			p.CPPFCPEntityIPAddress = v
 		}
 	}
 	return nil

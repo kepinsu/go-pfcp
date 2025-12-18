@@ -173,7 +173,6 @@ func (f *MulticastAddress) MarshalTo(b []byte) error {
 		b[offset] = 0x80 | 0x10
 		offset += 1
 		copy(b[offset:offset+16], f.IPv6Address)
-		offset += 16
 	}
 	return nil
 }

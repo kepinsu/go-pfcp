@@ -34,9 +34,7 @@ func ParseMBSSessionN4mbInformationFields(b []byte) (*MBSSessionN4mbInformationF
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case MulticastTransportInformation:
+		if ie.Type == MulticastTransportInformation {
 			transport, err := ie.MulticastTransportInformation()
 			if err != nil {
 				return f, err

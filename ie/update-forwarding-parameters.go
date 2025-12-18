@@ -118,6 +118,12 @@ func (u *UpdateForwardingParametersFields) ParseIEs(ies ...*IE) error {
 				return err
 			}
 			u.ForwardingPolicyIdentifier = identifier
+		case PFCPSMReqFlags:
+			v, err := ie.PFCPSMReqFlags()
+			if err != nil {
+				return err
+			}
+			u.PFCPSMReqFlags = v
 		case HeaderEnrichment:
 			header, err := ie.HeaderEnrichment()
 			if err != nil {

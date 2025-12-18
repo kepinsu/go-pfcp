@@ -37,9 +37,7 @@ func ParseRemoveBARFields(b []byte) (*RemoveBARFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case BARID:
+		if ie.Type == BARID {
 			v, err := ie.BARID()
 			if err != nil {
 				return f, err

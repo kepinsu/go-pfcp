@@ -55,8 +55,7 @@ func (e *ErrorIndicationReportFields) ParseIEs(ies ...*IE) error {
 		if i == nil {
 			continue
 		}
-		switch i.Type {
-		case FTEID:
+		if i.Type == FTEID {
 			v, err := i.FTEID()
 			if err != nil {
 				return nil

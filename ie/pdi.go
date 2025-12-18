@@ -67,7 +67,7 @@ type PDIFields struct {
 	FramedRouting                   uint32
 	FramedIPv6Route                 string
 	SourceInterfaceType             uint8
-	IpMulticastAddressingInfo       []*IE
+	IPMulticastAddressingInfo       []*IPMulticastAddressingInfoField
 	DNSQueryFilter                  *IE
 	MBSSession                      *IE
 	AreaSessionID                   *IE
@@ -96,17 +96,17 @@ func (p *PDIFields) ParseIEs(ies ...*IE) error {
 		}
 		switch ie.Type {
 		case SourceInterface:
-			source, err := ie.SourceInterface()
+			v, err := ie.SourceInterface()
 			if err != nil {
 				return err
 			}
-			p.SourceInterface = source
+			p.SourceInterface = v
 		case FTEID:
-			tfeid, err := ie.FTEID()
+			v, err := ie.FTEID()
 			if err != nil {
 				return err
 			}
-			p.LocalFTEID = tfeid
+			p.LocalFTEID = v
 		case LocalIngressTunnel:
 			v, err := ie.LocalIngressTunnel()
 			if err != nil {
@@ -114,90 +114,90 @@ func (p *PDIFields) ParseIEs(ies ...*IE) error {
 			}
 			p.LocalIngressTunnel = v
 		case RedundantTransmissionParameters:
-			ies, err := ParseRedundantTransmissionParametersField(ie.Payload)
+			v, err := ie.RedundantTransmissionParameters()
 			if err != nil {
 				return err
 			}
-			p.RedundantTransmissionParameters = ies
+			p.RedundantTransmissionParameters = v
 		case NetworkInstance:
-			network, err := ie.NetworkInstance()
+			v, err := ie.NetworkInstance()
 			if err != nil {
 				return err
 			}
-			p.NetworkInstance = network
+			p.NetworkInstance = v
 		case UEIPAddress:
-			ip, err := ie.UEIPAddress()
+			v, err := ie.UEIPAddress()
 			if err != nil {
 				return err
 			}
-			p.UEIPAddress = append(p.UEIPAddress, ip)
+			p.UEIPAddress = append(p.UEIPAddress, v)
 		case TrafficEndpointID:
-			trafic, err := ie.TrafficEndpointID()
+			v, err := ie.TrafficEndpointID()
 			if err != nil {
 				return err
 			}
-			p.TrafficEndpointID = append(p.TrafficEndpointID, trafic)
+			p.TrafficEndpointID = append(p.TrafficEndpointID, v)
 		case SDFFilter:
-			filter, err := ie.SDFFilter()
+			v, err := ie.SDFFilter()
 			if err != nil {
 				return err
 			}
-			p.SDFFilter = append(p.SDFFilter, filter)
+			p.SDFFilter = append(p.SDFFilter, v)
 		case ApplicationID:
-			appID, err := ie.ApplicationID()
+			v, err := ie.ApplicationID()
 			if err != nil {
 				return err
 			}
-			p.ApplicationID = appID
+			p.ApplicationID = v
 		case EthernetPDUSessionInformation:
-			ethernetPDU, err := ie.EthernetPDUSessionInformation()
+			v, err := ie.EthernetPDUSessionInformation()
 			if err != nil {
 				return err
 			}
-			p.EthernetPDUSessionInformation = ethernetPDU
+			p.EthernetPDUSessionInformation = v
 		case EthernetPacketFilter:
-			etherFilter, err := ie.EthernetPacketFilter()
+			v, err := ie.EthernetPacketFilter()
 			if err != nil {
 				return err
 			}
-			p.EthernetPacketFilter = etherFilter
+			p.EthernetPacketFilter = v
 		case QFI:
-			qfi, err := ie.QFI()
+			v, err := ie.QFI()
 			if err != nil {
 				return err
 			}
-			p.QFI = append(p.QFI, qfi)
+			p.QFI = append(p.QFI, v)
 		case FramedRoute:
-			i, err := ie.FramedRoute()
+			v, err := ie.FramedRoute()
 			if err != nil {
 				return err
 			}
-			p.FramedRoute = append(p.FramedRoute, i)
+			p.FramedRoute = append(p.FramedRoute, v)
 		case FramedRouting:
-			i, err := ie.FramedRouting()
+			v, err := ie.FramedRouting()
 			if err != nil {
 				return err
 			}
-			p.FramedRouting = i
+			p.FramedRouting = v
 		case FramedIPv6Route:
-			i, err := ie.FramedIPv6Route()
+			v, err := ie.FramedIPv6Route()
 			if err != nil {
 				return err
 			}
-			p.FramedIPv6Route = i
+			p.FramedIPv6Route = v
 		case TGPPInterfaceType:
-			i, err := ie.TGPPInterfaceType()
+			v, err := ie.TGPPInterfaceType()
 			if err != nil {
 				return err
 			}
-			p.SourceInterface = i
+			p.SourceInterface = v
 
 		case IPMulticastAddressingInfo:
-			ies, err := ParseMultiIEs(ie.Payload)
+			v, err := ie.IPMulticastAddressingInfo()
 			if err != nil {
 				return err
 			}
-			p.IpMulticastAddressingInfo = ies
+			p.IPMulticastAddressingInfo = append(p.IPMulticastAddressingInfo, v)
 		}
 	}
 	return nil

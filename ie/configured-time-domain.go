@@ -24,8 +24,7 @@ func (i *IE) ConfiguredTimeDomain() (uint8, error) {
 			if i == nil {
 				continue
 			}
-			switch i.Type {
-			case ConfiguredTimeDomain:
+			if i.Type == ConfiguredTimeDomain {
 				return i.ConfiguredTimeDomain()
 			}
 		}

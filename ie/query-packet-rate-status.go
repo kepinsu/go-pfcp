@@ -24,8 +24,8 @@ type QueryPacketRateStatusFields struct {
 }
 
 // NewQueryPacketRateStatusFields creates a new QueryPacketRateStatusFields.
-func NewQueryPacketRateStatusFields(QERID uint32) *QueryPacketRateStatusFields {
-	f := &QueryPacketRateStatusFields{QERID: QERID}
+func NewQueryPacketRateStatusFields(qerid uint32) *QueryPacketRateStatusFields {
+	f := &QueryPacketRateStatusFields{QERID: qerid}
 	return f
 }
 
@@ -41,8 +41,7 @@ func ParseQueryPacketRateStatusFields(b []byte) (*QueryPacketRateStatusFields, e
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case QERID:
+		if ie.Type == QERID {
 			v, err := ie.QERID()
 			if err != nil {
 				return p, err

@@ -37,9 +37,7 @@ func ParseRemoveTrafficEndpointFields(b []byte) (*RemoveTrafficEndpointFields, e
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case TrafficEndpointID:
+		if ie.Type == TrafficEndpointID {
 			v, err := ie.TrafficEndpointID()
 			if err != nil {
 				return f, err

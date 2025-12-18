@@ -141,7 +141,6 @@ func (f *LocalIngressTunnelFields) UnmarshalBinary(b []byte) error {
 			return io.ErrUnexpectedEOF
 		}
 		f.IPv6Address = net.IP(b[offset : offset+16]).To16()
-		offset += 16
 	}
 
 	return nil
@@ -180,7 +179,6 @@ func (f *LocalIngressTunnelFields) MarshalTo(b []byte) error {
 
 	if has1stBit(f.Flags) {
 		copy(b[offset:offset+16], f.IPv6Address)
-		offset += 16
 	}
 
 	return nil

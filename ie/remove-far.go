@@ -37,9 +37,7 @@ func ParseRemoveFARFields(b []byte) (*RemoveFARFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case FARID:
+		if ie.Type == FARID {
 			v, err := ie.FARID()
 			if err != nil {
 				return f, err

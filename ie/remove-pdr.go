@@ -37,9 +37,7 @@ func ParseRemovePDRFields(b []byte) (*RemovePDRFields, error) {
 		if ie == nil {
 			continue
 		}
-
-		switch ie.Type {
-		case PDRID:
+		if ie.Type == PDRID {
 			v, err := ie.PDRID()
 			if err != nil {
 				return f, err
