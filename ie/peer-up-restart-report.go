@@ -46,8 +46,7 @@ func (far *PeerUPRestartReportFields) ParseIEs(ies ...*IE) error {
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case RemoteGTPUPeer:
+		if ie.Type == RemoteGTPUPeer {
 			v, err := ie.RemoteGTPUPeer()
 			if err != nil {
 				return err

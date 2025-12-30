@@ -124,7 +124,6 @@ func (f *MBSSessionIdentifierFields) UnmarshalBinary(b []byte) error {
 			return io.ErrUnexpectedEOF
 		}
 		copy(f.NID, b[offset:offset+6])
-		offset += 6
 	}
 
 	return nil

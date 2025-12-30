@@ -57,8 +57,7 @@ func ParseAccessAvailabilityControlInformationFields(b []byte) (*AccessAvailabil
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case RequestedAccessAvailabilityInformation:
+		if ie.Type == RequestedAccessAvailabilityInformation {
 			v, err := ie.RequestedAccessAvailabilityInformation()
 			if err != nil {
 				return a, err

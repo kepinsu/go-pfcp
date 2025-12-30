@@ -54,8 +54,7 @@ func (s *AccessAvailabilityReportFields) ParseIEs(ies ...*IE) error {
 		if i == nil {
 			continue
 		}
-		switch i.Type {
-		case AccessAvailabilityInformation:
+		if i.Type == AccessAvailabilityInformation {
 			v, err := i.AccessAvailabilityInformation()
 			if err != nil {
 				return nil

@@ -38,8 +38,7 @@ func ParseQueryURRFields(b []byte) (*QueryURRFields, error) {
 			continue
 		}
 
-		switch ie.Type {
-		case URRID:
+		if ie.Type == URRID {
 			v, err := ie.URRID()
 			if err != nil {
 				return f, err

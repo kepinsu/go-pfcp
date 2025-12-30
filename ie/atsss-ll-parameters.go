@@ -48,8 +48,7 @@ func ParseATSSSLLParametersFields(b []byte) (*ATSSSLLParametersFields, error) {
 		if ie == nil {
 			continue
 		}
-		switch ie.Type {
-		case ATSSSLLInformation:
+		if ie.Type == ATSSSLLInformation {
 			v, err := ie.ATSSSLLInformation()
 			if err != nil {
 				return p, err
