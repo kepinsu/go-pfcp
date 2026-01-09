@@ -524,7 +524,7 @@ for _, i := range cpdrIE.ChildIEs {
 
 #### List of supported IEs
 
-IEs are implemented in conformance with TS 29.244 V16.7.0 (2021-04). The word "supported" in the table below means that the constructor and helper method for the IE are implemented in this library. As described in the previous section, you can still create an IE of any type even if it is not supported or missing in the table.
+IEs are implemented in conformance with TS 29.244 V17.5.0 (2022-07). The word "supported" in the table below means that the constructor and helper method for the IE are implemented in this library. As described in the previous section, you can still create an IE of any type even if it is not supported or missing in the table.
 
 | IE Type        | Information elements                                                       | Supported? |
 | -------------- | -------------------------------------------------------------------------- | ---------- |
@@ -800,7 +800,56 @@ IEs are implemented in conformance with TS 29.244 V16.7.0 (2021-04). The word "s
 | 269            | Validity Timer                                                             | Yes        |
 | 270            | Redundant Transmission Forwarding Parameters                               | Yes        |
 | 271            | Transport Delay Reporting                                                  | Yes        |
-| 272 to 32767   | _(For future use)_                                                         | -          |
+| 272            | Partial Failure Information                                                | Yes        |
+| 274            | Offending IE Information                                                   | Yes        |
+| 275            | RAT Type                                                                   | Yes        |
+| 276            | L2TP Tunnel Information                                                    | Yes        |
+| 277            | L2TP Session Information                                                   | Yes        |
+| 278            | L2TP User Authentication IE                                                | No         |
+| 279            | Created L2TP Session                                                       | Yes        |
+| 280            | LNS Address                                                                | Yes        |
+| 281            | Tunnel Preference                                                          | Yes        |
+| 282            | Calling Number                                                             | Yes        |
+| 283            | Called Number                                                              | Yes        |
+| 284            | L2TP Session Indications                                                   | Yes        |
+| 285            | DNS Server Address                                                         | Yes        |
+| 286            | NBNS Server Address                                                        | Yes        |
+| 287            | Maximum Receive Unit                                                       | Yes        |
+| 288            | Thresholds                                                                 | Yes        |
+| 289            | Steering Mode Indicator                                                    | Yes        |
+| 290            | FPCP Session Change Info                                                   | Yes        |
+| 291            | Group ID                                                                   | Yes        |
+| 292            | CP IP Address                                                              | Yes        |
+| 293            | IP Adress and Port number Replacement                                      | Yes        |
+| 294            | DNS Query Filter                                                           | Yes        |
+| 295            | Direct Reporting Filter                                                    | Yes        |
+| 296            | Event Notification URI                                                     | Yes        |
+| 297            | Notification Correlation ID                                                | Yes        |
+| 298            | Reporting Flags                                                            | Yes        |
+| 299            | Predefined Rules Name                                                      | Yes        |
+| 300            | MBS Session N4mb Control Information                                       | Yes        |
+| 301            | MBS Multicast Parameters                                                   | Yes        |
+| 302            | Add MBS Unicast Parameters                                                 | Yes        |
+| 303            | MBS Session N4mb Information                                               | Yes        |
+| 304            | Remove MBS Unicast Parameters                                              | Yes        |
+| 305            | MBS Session Identifier                                                     | Yes        |
+| 306            | Multicast Transport Information                                            | Yes        |
+| 307            | MBNS4mbReq-Flags                                                           | Yes        |
+| 308            | Local Ingress Tunnel                                                       | Yes        |
+| 309            | MBS Unicast Parameters ID                                                  | Yes        |
+| 310            | MBS Session N4 Control Information                                         | Yes        |
+| 311            | MBS Session N4 Information                                                 | Yes        |
+| 312            | MBSN4Resp-Flags                                                            | Yes        |
+| 313            | Tunnel Password                                                            | Yes        |
+| 314            | Area Session ID                                                            | Yes        |
+| 315            | Peer UP Restart Report                                                     | Yes        |
+| 316            | DSCP to PPI Control Information                                            | Yes        |
+| 317            | DSCP to PPI Mapping Information                                            | Yes        |
+| 318            | PFCPSDRsp-Flags                                                            | Yes        |
+| 319            | Qer Indications                                                            | Yes        |
+| 320            | Vendor-Specific Node Report Type                                           | No         |
+| 321            | Configured Time Domain                                                     | Yes        |
+| 322 to 32767   | _(For future use)_                                                         | -          |
 | 32768 to 65535 | Reserved for vendor specific IEs                                           | -          |
 
 ## Author(s)
