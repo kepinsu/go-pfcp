@@ -49,42 +49,49 @@ func ParseDuplicatingParametersFields(b []byte) (*DuplicatingParametersFields, e
 		return nil, err
 	}
 	d := &DuplicatingParametersFields{}
+	if err := d.ParseIEs(ies...); err != nil {
+		return d, err
+	}
+	return d, nil
+}
+
+// ParseIEs will iterator over all childs IE to avoid to use Parse or ParseMultiIEs any time we iterate in IE
+func (d *DuplicatingParametersFields) ParseIEs(ies ...*IE) error {
 	for _, ie := range ies {
 		if ie == nil {
 			continue
 		}
-
 		switch ie.Type {
 		case DestinationInterface:
 			dest, err := ie.DestinationInterface()
 			if err != nil {
-				return d, err
+				return err
 			}
 			d.DestinationInterface = dest
 		case OuterHeaderCreation:
 			creation, err := ie.OuterHeaderCreation()
 			if err != nil {
-				return d, err
+				return err
 			}
 			d.OuterHeaderCreation = creation
 		case TransportLevelMarking:
 			transport, err := ie.TransportLevelMarking()
 			if err != nil {
-				return d, err
+				return err
 			}
 			d.TransportLevelMarking = transport
 		case ForwardingPolicy:
 			policy, err := ie.ForwardingPolicy()
 			if err != nil {
-				return d, err
+				return err
 			}
 			d.ForwardingPolicy = policy
 			identifier, err := ie.ForwardingPolicyIdentifier()
 			if err != nil {
-				return d, err
+				return err
 			}
 			d.ForwardingPolicyIdentifier = identifier
 		}
 	}
-	return d, nil
+	return nil
 }

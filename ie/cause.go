@@ -8,6 +8,8 @@ package ie
 const (
 	_                                                                    uint8 = 0
 	CauseRequestAccepted                                                 uint8 = 1
+	CauseMoreUsageReportToSend                                           uint8 = 2
+	CausePartiallyAccepted                                               uint8 = 3
 	CauseRequestRejected                                                 uint8 = 64
 	CauseSessionContextNotFound                                          uint8 = 65
 	CauseMandatoryIEMissing                                              uint8 = 66
